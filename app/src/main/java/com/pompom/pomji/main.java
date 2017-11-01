@@ -29,14 +29,14 @@ class User{
     }
 }
 
-class Animal{
+class Pom{
     protected String name;
     protected int hunger;
     protected int weight;
     protected int sleepiness;
     protected boolean sleep;
     protected boolean sick;
-    public Animal(){
+    public Pom(){
         hunger = 100;
         sleepiness = 100;
         sleep = false;
@@ -50,7 +50,7 @@ class Animal{
     }
 }
 
-class theChoosenPom extends Animal{
+class theChoosenPom extends Pom{
     public theChoosenPom(){
         super();
     }
