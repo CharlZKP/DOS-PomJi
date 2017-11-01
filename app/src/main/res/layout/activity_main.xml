@@ -6,63 +6,45 @@
     android:layout_height="match_parent"
     tools:context="com.pompom.pomji.main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pompom"
-        android:textSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:id="@+id/userNameTxt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Name"
+            android:textSize="20sp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/count"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="0"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.212" />
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="80dp"
+            android:text="none"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/userNameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="Name"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.439"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.379" />
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="Null"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.558"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.379" />
 
-    <ImageView
-        android:id="@+id/pet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+    <FrameLayout
+        android:id="@+id/home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/pom"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:scaleX="-1"
+            android:src="@drawable/udinopom" />
+
+    </FrameLayout>
+
 
 </android.support.constraint.ConstraintLayout>
