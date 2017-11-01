@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PomJi</string>
+    <string name="pompom">PomPom</string>
+    <string name="_0" id="count">0</string>
+</resources>
