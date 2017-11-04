@@ -1,5 +1,6 @@
 package com.pompom.pomji;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.media.Image;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -27,63 +29,100 @@ class User{
     public String getName(){
         return name;
     }
+    public void setMoney(int m){money = m;}
 }
 
-class Pom{
+class Pom {
     protected String name;
     protected int hunger;
     protected int weight;
     protected int sleepiness;
     protected boolean sleep;
     protected boolean sick;
-    public Pom(){
+
+    public Pom() {
         hunger = 100;
         sleepiness = 100;
         sleep = false;
         sick = false;
     }
-    protected void Sleep(){
+
+    protected void Sleep() {
         sleep = true;
     }
-    protected void Eat(){
+
+    protected void Eat() {
 
     }
+
+
+
 }
 
-class theChoosenPom extends Pom{
-    public theChoosenPom(){
+abstract class Bar{
+    protected int value = 100;
+    abstract void Decrease();
+}
+
+class FoodBar extends Bar{
+    public void Decrease(){}
+}
+
+class SleepBar extends Bar{
+    public void Decrease(){}
+
+}
+
+class FunBar extends Bar{
+    public void Decrease(){}
+
+}
+
+
+
+class Udinopom extends Pom{
+    public Udinopom(){
         super();
     }
 }
 
 public class main extends AppCompatActivity {
-    private ImageView pom;
     private TextView userName;
-
-    private int frameWidth;
-    private int pomWidth;
+    private ImageView pom;
 
     private float pomX;
 
-    private Handler handler = new Handler();
+    private int frameWidth,pomWidth;
+
     private Timer timer = new Timer();
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
 
         User u = new User();
+        //final Pom p = new Udinopom();
+
         u.setName(shared.getString("userName","None"));
+        u.setMoney(shared.getInt("money",0));
 
         pom = (ImageView)findViewById(R.id.pom);
-        userName = (TextView)findViewById(R.id.userName);
 
+        userName = (TextView)findViewById(R.id.userName);
         userName.setText(u.getName());
+
+        MessageReceiver receiver = new MessageReceiver(new Message());
+
+
+        Intent intent = new Intent(this,TimerService.class);
+        intent.putExtra("time",100);
+        intent.putExtra("receiver",receiver);
+        startService(intent);
 
         timer.schedule(new TimerTask() {
             @Override
@@ -96,27 +135,34 @@ public class main extends AppCompatActivity {
                 });
             }
         },0,80);
+
     }
 
-    public void changePos(){
-        FrameLayout frame = (FrameLayout) findViewById(R.id.home);
+    public void changePos() {
+        FrameLayout frame = (FrameLayout)findViewById(R.id.home) ;
         frameWidth = frame.getWidth();
         pomWidth = pom.getWidth();
-        if (pomX+pomWidth>=frameWidth){
+        if(pomX+pomWidth>=frameWidth){
             pom.setScaleX(1f);
-            pomX -= 10;
+            pomX-=10;
         }else if(pomX<=0){
             pom.setScaleX(-1f);
-            pomX += 10;
+            pomX+=10;
         }else{
-            if(pom.getScaleX()==1) {
-                pomX -= 10;
+            if(pom.getScaleX()==1){
+                pomX-=10;
             }else{
-                pomX += 10;
+                pomX+=10;
             }
         }
-
         pom.setX(pomX);
+    }
+
+    public class Message{
+        public void displayMessage(int resultCode, Bundle resultData){
+            String message = resultData.getString("message");
+            Toast.makeText(main.this,resultCode+" "+message,Toast.LENGTH_SHORT).show();
+        }
     }
 
     public boolean onTouchEvent(MotionEvent me){
