@@ -3,6 +3,7 @@ package com.pompom.pomji;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.v4.app.NotificationCompat;
@@ -31,41 +32,19 @@ public class TimerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent){
-        if(intent==null){
-            int time = 5;
-            for (int i=0;i<time;i++){
-                Log.v("timer","i(intent is null)="+i);
-                try {
-                    Thread.sleep(1000);
-                }catch (Exception e){
-
-                }
-            }
-
-            NotificationCompat.Builder nb = new NotificationCompat.Builder(this);
-            nb.setContentText("Timer Done");
-            nb.setContentTitle("็Hi!");
-            nb.setSmallIcon(R.mipmap.ic_launcher);
-
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.notify(1,nb.build());
-            return;
-        }
-
-        ResultReceiver receiver = intent.getParcelableExtra("receiver");
-        int time = intent.getIntExtra("time",0);
-
-        for (int i =0;i<time;i++){
-            Log.v("timer","i (intent is not null)="+i);
+        int finaltime=0;
+        SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        for (int i=1;i<=Integer.MAX_VALUE;i++){
+            Log.v("timer","i(intent is null)="+shared.getInt("time",0));
             try {
                 Thread.sleep(1000);
             }catch (Exception e){
 
             }
+            finaltime=1+shared.getInt("time",0);
+            editor.putInt("time",finaltime);
+            editor.commit();
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("message","Counting done...");
-
-        receiver.send(1234,bundle);
     }
 }

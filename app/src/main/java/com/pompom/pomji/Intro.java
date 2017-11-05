@@ -22,17 +22,23 @@ public class Intro extends AppCompatActivity {
 
         setNameButton = (Button)findViewById(R.id.setNameButton);
         name = (EditText)findViewById(R.id.name);
-
-        setNameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
-                SharedPreferences.Editor editor = shared.edit();
-                editor.putString("userName",name.getText().toString());
-                editor.commit();
-                Intent intent = new Intent(Intro.this, main.class);
-                startActivity(intent);
-            }
-        });
+        SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
+        if(shared.getBoolean("first",true)) {
+            setNameButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shared.edit();
+                    editor.putString("userName", name.getText().toString());
+                    editor.putBoolean("first", true);
+                    editor.commit();
+                    Intent intent = new Intent(Intro.this, main.class);
+                    startActivity(intent);
+                }
+            });
+        }else{
+            Intent intent = new Intent(Intro.this, main.class);
+            startActivity(intent);
+        }
     }
 }
