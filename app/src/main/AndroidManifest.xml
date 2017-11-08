@@ -18,14 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Intro"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Intro"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".main"
             android:screenOrientation="portrait" />
-        <service android:name=".TimerService"
-            android:exported="false"/>
+        <activity
+            android:name=".PlayWithPom"
+            android:screenOrientation="portrait"/>
 
+        <service
+            android:name=".TimerService"
+            android:exported="false" />
     </application>
 
 </manifest>
