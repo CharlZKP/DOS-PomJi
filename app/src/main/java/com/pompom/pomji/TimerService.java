@@ -41,7 +41,7 @@ public class TimerService extends IntentService {
         String json = shared.getString("User", "");
         User user = gson.fromJson(json, User.class);
 
-        for (int i=1;i<=Integer.MAX_VALUE;i++){
+        for (long i=1;i<=Long.MAX_VALUE;i++){
             Log.v("timer","i(intent is null)="+shared.getInt("time",0));
             Log.v("clean",""+user.getPom().getClean());
             try {

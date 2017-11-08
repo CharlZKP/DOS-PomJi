@@ -42,8 +42,8 @@ class User {
         return money;
     }
 
-    public void buyPom(ImageView i) {
-        pom = new Sharknapom(i);
+    public void buyPom() {
+        pom = new Sharknapom();
     }
 
     public Pom getPom() {
@@ -52,9 +52,9 @@ class User {
 }
 
 abstract class Pom {
-    protected String namepom;
+    private String namepom;
+    private int weight;
     protected int hunger;
-    protected int weight;
     protected int energy;
     protected int clean;
     protected int fun;
@@ -62,7 +62,7 @@ abstract class Pom {
     protected boolean sick;
 
 
-    Pom(ImageView i) {
+    Pom() {
         hunger = 100;
         energy = 100;
         clean = 100;
@@ -109,6 +109,8 @@ abstract class Pom {
 
     abstract boolean Move(boolean change, ImageView img);
 
+    abstract boolean Sick(boolean change, ImageView img, boolean s);
+
     abstract boolean Dirty(boolean change, ImageView img, int c);
 
     protected boolean getSick() {
@@ -132,8 +134,8 @@ abstract class Pom {
 class Sharknapom extends Pom {
     private boolean change = false;
 
-    Sharknapom(ImageView i) {
-        super(i);
+    Sharknapom() {
+        super();
     }
 
     public boolean Move(boolean change, ImageView img) {
@@ -142,6 +144,17 @@ class Sharknapom extends Pom {
             return false;
         } else {
             img.setImageResource(R.drawable.sharknapom);
+            return true;
+        }
+    }
+
+    @Override
+    public boolean Sick(boolean change, ImageView img, boolean s) {
+        if (s) {
+            img.setImageResource(R.drawable.sharknapom_1sick_1);
+            return false;
+        } else {
+            img.setImageResource(R.drawable.sharknapom_1sick_2);
             return true;
         }
     }
@@ -173,11 +186,15 @@ class Sharknapom extends Pom {
 
 
 class Udinopom extends Pom {
-    public Udinopom(ImageView i) {
-        super(i);
+    public Udinopom() {
+        super();
     }
 
     public boolean Dirty(boolean change, ImageView img, int c) {
+        return true;
+    }
+
+    public boolean Sick(boolean change, ImageView img, boolean s) {
         return true;
     }
 
@@ -314,7 +331,7 @@ public class main extends AppCompatActivity {
         if (first) {
             user = new User();
             user.setName(shared.getString("userName", "None"));
-            user.buyPom(pom);
+            user.buyPom();
             String json = gson.toJson(user);
             editor.putString("User", json);
             editor.putBoolean("first", false);
@@ -341,24 +358,26 @@ public class main extends AppCompatActivity {
         pomAnimation();
     }
 
-    public void pomAnimation(){
+    public void pomAnimation() {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if(!touch) {
+                        if (!touch) {
                             Gson gson = new Gson();
                             SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
                             String json = shared.getString("User", "");
                             user = gson.fromJson(json, User.class);
 
-                            if (user.getPom().getClean() > 50) {
-                                change = user.getPom().Move(change, pom);
-                                changePos();
+                            if (user.getPom().getSick()) {
+                                change = user.getPom().Sick(change, pom, user.getPom().getSick());
                             } else if (user.getPom().getClean() <= 50) {
                                 change = user.getPom().Dirty(change, pom, user.getPom().getClean());
+                            } else {
+                                change = user.getPom().Move(change, pom);
+                                changePos();
                             }
                         }
                     }
@@ -403,7 +422,7 @@ public class main extends AppCompatActivity {
                     t.cancel();
                     touch = false;
                 }
-            },1000,1);
+            }, 800, 1);
         }
         return true;
     }
