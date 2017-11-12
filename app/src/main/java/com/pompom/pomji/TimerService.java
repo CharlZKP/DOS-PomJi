@@ -1,8 +1,14 @@
 package com.pompom.pomji;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -41,8 +47,11 @@ public class TimerService extends IntentService {
         String json = shared.getString("User", "");
         User user = gson.fromJson(json, User.class);
 
+        Intent notiIntent = new Intent(this,main.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notiIntent, 0);
+
         for (long i=1;i<=Long.MAX_VALUE;i++){
-            Log.v("timer","i(intent is null)="+shared.getInt("time",0));
+            Log.v("timer","timer="+shared.getInt("time",0));
             Log.v("clean",""+user.getPom().getClean());
             try {
                 Thread.sleep(1000);
@@ -70,6 +79,79 @@ public class TimerService extends IntentService {
                     user.getPom().setSick(true);
                 }
             }
+            if(user.getPom().getHunger()==30){
+                Notification notification =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Pom Alert!!")
+                                .setContentText("้ป้อนข้าวด้วย หิวจะตายแล้ว -3-")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .build();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(0, notification);
+
+            }
+            if(user.getPom().getSick()){
+                Notification notification =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Pom Alert!!")
+                                .setContentText("ตัวร้อนจี๋เลย สงสัยจะเป็นไข้")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .build();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(1, notification);
+
+            }
+            if(user.getPom().getClean()==30){
+                Notification notification =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Pom Alert!!")
+                                .setContentText("เหม็น~ อาบน้ำด้วยกัน <3")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .build();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(2, notification);
+
+            }
+            if(user.getPom().getEnergy()==30){
+                Notification notification =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Pom Alert!!")
+                                .setContentText("ง่วงแล้ว พาเข้านอนหน่อยสิ Zzz")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .build();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(3, notification);
+
+            }
+
+            if(user.getPom().getFun()==30){
+                Notification notification =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Pom Alert!!")
+                                .setContentText("เบื่อจัง อยากไปเดินเล่น")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+                                .build();
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(4, notification);
+
+            }
+
+
             json = gson.toJson(user);
             editor.putString("User", json);
             editor.putInt("time",finaltime);

@@ -7,12 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.Expose;
 
 import java.util.Timer;
@@ -148,7 +151,6 @@ class Sharknapom extends Pom {
         }
     }
 
-    @Override
     public boolean Sick(boolean change, ImageView img, boolean s) {
         if (s) {
             img.setImageResource(R.drawable.sharknapom_1sick_1);
@@ -308,6 +310,8 @@ public class main extends AppCompatActivity {
     private Handler handler = new Handler();
     private boolean change = false;
     private User user;
+    private Pom[] myPom = new Pom[3];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -326,6 +330,15 @@ public class main extends AppCompatActivity {
         ProgressBar energyBar = (ProgressBar) findViewById(R.id.energybar);
         ProgressBar funBar = (ProgressBar) findViewById(R.id.funbar);
         ProgressBar hungerBar = (ProgressBar) findViewById(R.id.hungerbar);
+        Button play = (Button) findViewById(R.id.play);
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(main.this, PlayWithPom.class);
+                startActivity(intent);
+            }
+        });
 
 
         if (first) {
@@ -333,6 +346,7 @@ public class main extends AppCompatActivity {
             user.setName(shared.getString("userName", "None"));
             user.buyPom();
             String json = gson.toJson(user);
+            Log.v("json",json);
             editor.putString("User", json);
             editor.putBoolean("first", false);
             editor.commit();
@@ -372,11 +386,11 @@ public class main extends AppCompatActivity {
                             user = gson.fromJson(json, User.class);
 
                             if (user.getPom().getSick()) {
-                                change = user.getPom().Sick(change, pom, user.getPom().getSick());
+                                change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
                             } else if (user.getPom().getClean() <= 50) {
-                                change = user.getPom().Dirty(change, pom, user.getPom().getClean());
+                                change = (user.getPom()).Dirty(change, pom, user.getPom().getClean());
                             } else {
-                                change = user.getPom().Move(change, pom);
+                                change = (user.getPom()).Move(change, pom);
                                 changePos();
                             }
                         }
