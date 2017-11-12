@@ -23,7 +23,8 @@ class User {
     private String name;
     @Expose
     private int money = 0;
-
+    @Expose
+    private Sharknapom pom;
 
     public void setName(String n) {
         name = n;
@@ -42,11 +43,11 @@ class User {
     }
 
     public void buyPom() {
-//        pom = new Sharknapom();
+        pom = new Sharknapom();
     }
 
     public Pom getPom() {
-        //return pom;
+        return pom;
     }
 }
 

@@ -51,16 +51,16 @@ public class TimerService extends IntentService {
             }
 
             finaltime=1+shared.getInt("time",0);
-            if(user.getPom().getClean()>0 && finaltime%432==0){
+            if(user.getPom().getClean()>0 && finaltime%144==0){
                 user.getPom().setClean(user.getPom().getClean()-1);
             }
-            if(user.getPom().getEnergy()>0 && finaltime%864==0){
+            if(user.getPom().getEnergy()>0 && finaltime%432==0){
                 user.getPom().setEnergy(user.getPom().getEnergy()-1);
             }
-            if (user.getPom().getHunger()>0 && finaltime%288==0){
+            if (user.getPom().getHunger()>0 && finaltime%108==0){
                 user.getPom().setHunger(user.getPom().getHunger()-1);
             }
-            if (user.getPom().getFun()>0 & finaltime%1728==0){
+            if (user.getPom().getFun()>0 & finaltime%864==0){
                 user.getPom().setFun(user.getPom().getFun()-1);
             }
             if(finaltime%259200==0 && !user.getPom().getSick()){
