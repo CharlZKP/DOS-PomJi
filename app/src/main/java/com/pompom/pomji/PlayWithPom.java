@@ -16,6 +16,8 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
 
     TextView steps;
 
+    int count=0;
+
     boolean running = false;
 
     @Override
@@ -50,6 +52,8 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(running){
             steps.setText(String.valueOf(sensorEvent.values[0]));
+        }else{
+            sensorEvent.values[0]=0;
         }
     }
 

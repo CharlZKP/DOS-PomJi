@@ -186,7 +186,6 @@ class Sharknapom extends Pom {
     }
 }
 
-
 class Udinopom extends Pom {
     public Udinopom() {
         super();
@@ -330,12 +329,20 @@ public class main extends AppCompatActivity {
         ProgressBar energyBar = (ProgressBar) findViewById(R.id.energybar);
         ProgressBar funBar = (ProgressBar) findViewById(R.id.funbar);
         ProgressBar hungerBar = (ProgressBar) findViewById(R.id.hungerbar);
-        Button play = (Button) findViewById(R.id.play);
+        Button playButton = (Button) findViewById(R.id.playButton);
+        Button shopButton = (Button) findViewById(R.id.shopButton);
 
-        play.setOnClickListener(new View.OnClickListener() {
+        playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(main.this, PlayWithPom.class);
+                startActivity(intent);
+            }
+        });
+        shopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(main.this, Shop.class);
                 startActivity(intent);
             }
         });

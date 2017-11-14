@@ -26,11 +26,17 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".PlayWithPom"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".TimerService"
             android:exported="false" />
+
+        <activity android:name=".MyFood" />
+        <activity
+            android:name=".Shop"
+            android:label="@string/title_activity_shop"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
