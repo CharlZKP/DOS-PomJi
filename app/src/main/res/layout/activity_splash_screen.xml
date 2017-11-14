@@ -7,8 +7,11 @@
     tools:context="com.pompom.pomji.SplashScreen">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/logo" />
+        android:layout_width="341dp"
+        android:layout_height="538dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/pompom"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="12dp" />
 
 </android.support.constraint.ConstraintLayout>
