@@ -131,6 +131,11 @@ abstract class Pom {
     protected void Eat() {
 
     }
+    public boolean Clean(boolean change,ImageView img){
+        img.setImageResource(R.drawable.sharknapom);
+        return true;
+
+    }
 
 }
 
@@ -140,6 +145,8 @@ class Sharknapom extends Pom {
     Sharknapom() {
         super();
     }
+
+
 
     public boolean Move(boolean change, ImageView img) {
         if (change) {
@@ -152,6 +159,7 @@ class Sharknapom extends Pom {
     }
 
     public boolean Sick(boolean change, ImageView img, boolean s) {
+
         if (s) {
             img.setImageResource(R.drawable.sharknapom_1sick_1);
             return false;
@@ -310,6 +318,7 @@ public class main extends AppCompatActivity {
     private boolean change = false;
     private User user;
     private Pom[] myPom = new Pom[3];
+    private boolean cleans = false;
 
 
     @Override
@@ -331,6 +340,7 @@ public class main extends AppCompatActivity {
         ProgressBar hungerBar = (ProgressBar) findViewById(R.id.hungerbar);
         Button playButton = (Button) findViewById(R.id.playButton);
         Button shopButton = (Button) findViewById(R.id.shopButton);
+        Button cleanButton = (Button) findViewById(R.id.cleanButton);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,6 +356,14 @@ public class main extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        cleanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cleans = true;
+            }
+        });
+
+
 
 
         if (first) {
@@ -389,10 +407,20 @@ public class main extends AppCompatActivity {
                         if (!touch) {
                             Gson gson = new Gson();
                             SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = shared.edit();
                             String json = shared.getString("User", "");
                             user = gson.fromJson(json, User.class);
+                            if (cleans){
+                                change = (user.getPom()).Clean(change, pom);
+                                user.getPom().setClean(user.getPom().getClean()+5);
+                                json = gson.toJson(user);
+                                editor.putString("User", json);
+                                editor.commit();
+                                if (user.getPom().getClean() == 100) {
 
-                            if (user.getPom().getSick()) {
+                                    cleans = false;
+                                }
+                            }else if (user.getPom().getSick()) {
                                 change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
                             } else if (user.getPom().getClean() <= 50) {
                                 change = (user.getPom()).Dirty(change, pom, user.getPom().getClean());
