@@ -1,15 +1,23 @@
 package com.pompom.pomji;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import static android.content.Context.MODE_PRIVATE;
 
 class Medicine{
     private int img;
@@ -73,7 +81,7 @@ public class MedShop extends Fragment {
         }
 
         @Override
-        public View getView(int i,View view,ViewGroup viewGroup){
+        public View getView(final int i,View view,ViewGroup viewGroup){
             view = getLayoutInflater().inflate(R.layout.cutom_shop_layout,null);
 
             ImageView imageView = (ImageView) view.findViewById(R.id.imgItem);
@@ -81,6 +89,23 @@ public class MedShop extends Fragment {
             TextView txtDes = (TextView) view.findViewById(R.id.txtItemDescription);
             TextView txtValue = (TextView) view.findViewById(R.id.txtItemValue);
             TextView txtPrice = (TextView) view.findViewById(R.id.txtItemPrice);
+
+            Button buyButton = (Button) view.findViewById(R.id.buyButton);
+
+            buyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shared.edit();
+                    if(shared.getInt("coin",0)-med[i].getPrice()<0){
+                        Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
+                    }else {
+                        editor.putInt("coin", shared.getInt("coin", 0) - med[i].getPrice());
+                    }
+                    editor.commit();
+                    Log.v("money",String.valueOf(shared.getInt("coin",0)));
+                }
+            });
 
             imageView.setImageResource(med[i].getImg());
             txtName.setText(med[i].getName());

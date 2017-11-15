@@ -25,7 +25,7 @@ class User {
     @Expose
     private String name;
     @Expose
-    private int money = 0;
+    private int money = 999;
     @Expose
     private Sharknapom pom;
 
@@ -68,7 +68,7 @@ abstract class Pom {
     Pom() {
         hunger = 100;
         energy = 100;
-        clean = 100;
+        clean = 30;
         fun = 100;
         sleep = false;
         sick = false;
@@ -319,6 +319,7 @@ public class main extends AppCompatActivity {
     private User user;
     private Pom[] myPom = new Pom[3];
     private boolean cleans = false;
+    private int coin;
 
 
     @Override
@@ -326,8 +327,8 @@ public class main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = shared.edit();
+        final SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = shared.edit();
         Gson gson = new Gson();
         boolean first = shared.getBoolean("first", true);
 
@@ -341,6 +342,15 @@ public class main extends AppCompatActivity {
         Button playButton = (Button) findViewById(R.id.playButton);
         Button shopButton = (Button) findViewById(R.id.shopButton);
         Button cleanButton = (Button) findViewById(R.id.cleanButton);
+        Button inventoryButton = (Button) findViewById(R.id.inventoryButton);
+
+        inventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(main.this, Inventory.class);
+                startActivity(intent);
+            }
+        });
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -360,6 +370,7 @@ public class main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 cleans = true;
+                editor.putBoolean("clean",cleans);
             }
         });
 
@@ -373,11 +384,14 @@ public class main extends AppCompatActivity {
             String json = gson.toJson(user);
             Log.v("json",json);
             editor.putString("User", json);
+            editor.putInt("coin",3000);
             editor.putBoolean("first", false);
+            editor.putBoolean("clean", false);
             editor.commit();
         } else {
             String json = shared.getString("User", "");
             user = gson.fromJson(json, User.class);
+            coin = shared.getInt("coin",0);
         }
 
         userName.setText(user.getName());
@@ -412,14 +426,15 @@ public class main extends AppCompatActivity {
                             user = gson.fromJson(json, User.class);
                             if (cleans){
                                 change = (user.getPom()).Clean(change, pom);
-                                user.getPom().setClean(user.getPom().getClean()+5);
+                                user.getPom().setClean(user.getPom().getClean()+2);
+                                if (user.getPom().getClean() >= 100) {
+                                    user.getPom().setClean(100);
+                                    cleans = false;
+//                                    editor.putBoolean("clean",cleans);
+                                }
                                 json = gson.toJson(user);
                                 editor.putString("User", json);
                                 editor.commit();
-                                if (user.getPom().getClean() == 100) {
-
-                                    cleans = false;
-                                }
                             }else if (user.getPom().getSick()) {
                                 change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
                             } else if (user.getPom().getClean() <= 50) {

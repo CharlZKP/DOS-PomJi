@@ -1,17 +1,26 @@
 package com.pompom.pomji;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import static android.content.Context.MODE_PRIVATE;
 
 class Food{
     private String name;
@@ -58,10 +67,12 @@ public class FoodShop extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
+
         return rootView;
     }
 
     class CustomAdapter extends BaseAdapter{
+        private Context mContext;
 
         @Override
         public int getCount() {
@@ -79,14 +90,30 @@ public class FoodShop extends Fragment {
         }
 
         @Override
-        public View getView(int i,View view,ViewGroup viewGroup){
+        public View getView(final int i,View view,ViewGroup viewGroup){
             view = getLayoutInflater().inflate(R.layout.cutom_shop_layout,null);
-
             ImageView imageView = (ImageView) view.findViewById(R.id.imgItem);
             TextView txtName = (TextView) view.findViewById(R.id.txtItemName);
             TextView txtDes = (TextView) view.findViewById(R.id.txtItemDescription);
             TextView txtValue = (TextView) view.findViewById(R.id.txtItemValue);
             TextView txtPrice = (TextView) view.findViewById(R.id.txtItemPrice);
+            Button buyButton = (Button) view.findViewById(R.id.buyButton);
+
+            buyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shared.edit();
+                    if(shared.getInt("coin",0)-food[i].getPrice()<0){
+                        Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
+                    }else {
+                        editor.putInt("coin", shared.getInt("coin", 0) - food[i].getPrice());
+                    }
+                    editor.commit();
+                    Log.v("money",String.valueOf(shared.getInt("coin",0)));
+                }
+            });
+
 
             imageView.setImageResource(food[i].getImg());
             txtName.setText(food[i].getName());

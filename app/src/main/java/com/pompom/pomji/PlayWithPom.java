@@ -1,6 +1,7 @@
 package com.pompom.pomji;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -16,7 +17,7 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
 
     TextView steps;
 
-    int count=0;
+    float count=0;
 
     boolean running = false;
 
@@ -44,6 +45,10 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
     @Override
     protected void onPause() {
         super.onPause();
+        SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putFloat("step",count);
+        editor.commit();
         running = false;
         sensorManager.unregisterListener(this);
     }
@@ -51,9 +56,15 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(running){
-            steps.setText(String.valueOf(sensorEvent.values[0]));
-        }else{
-            sensorEvent.values[0]=0;
+
+            SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
+            SharedPreferences.Editor editor = shared.edit();
+            if(shared.getFloat("step",0)==0){
+                editor.putFloat("step",0);
+                editor.commit();
+            }
+            steps.setText(String.valueOf(sensorEvent.values[0]-shared.getFloat("step",0)));
+            count = sensorEvent.values[0];
         }
     }
 

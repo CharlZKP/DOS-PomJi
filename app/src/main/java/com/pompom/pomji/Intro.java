@@ -37,6 +37,7 @@ public class Intro extends AppCompatActivity {
                 }
             });
         }else{
+            finish();
             Intent intent = new Intent(Intro.this, main.class);
             startActivity(intent);
         }

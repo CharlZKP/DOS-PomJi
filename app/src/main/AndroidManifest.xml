@@ -36,6 +36,10 @@
         <activity
             android:name=".Shop"
             android:label="@string/title_activity_shop"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Inventory"
+            android:label="@string/title_activity_inventory"
             android:theme="@style/AppTheme"></activity>
     </application>
 

@@ -39,18 +39,21 @@ public class TimerService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent){
         int finaltime=0;
-        Gson gson = new Gson();
 
-        SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
-        SharedPreferences.Editor editor = shared.edit();
 
-        String json = shared.getString("User", "");
-        User user = gson.fromJson(json, User.class);
+
 
         Intent notiIntent = new Intent(this,main.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notiIntent, 0);
 
         for (long i=1;i<=Long.MAX_VALUE;i++){
+            Gson gson = new Gson();
+
+            SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
+            SharedPreferences.Editor editor = shared.edit();
+            String json = shared.getString("User", "");
+            User user = gson.fromJson(json, User.class);
+
             Log.v("timer","timer="+shared.getInt("time",0));
             Log.v("clean",""+user.getPom().getClean());
             try {
@@ -62,15 +65,27 @@ public class TimerService extends IntentService {
             finaltime=1+shared.getInt("time",0);
             if(user.getPom().getClean()>0 && finaltime%144==0){
                 user.getPom().setClean(user.getPom().getClean()-1);
+                json = gson.toJson(user);
+                editor.putString("User", json);
+                editor.commit();
             }
             if(user.getPom().getEnergy()>0 && finaltime%432==0){
                 user.getPom().setEnergy(user.getPom().getEnergy()-1);
+                json = gson.toJson(user);
+                editor.putString("User", json);
+                editor.commit();
             }
             if (user.getPom().getHunger()>0 && finaltime%108==0){
                 user.getPom().setHunger(user.getPom().getHunger()-1);
+                json = gson.toJson(user);
+                editor.putString("User", json);
+                editor.commit();
             }
             if (user.getPom().getFun()>0 & finaltime%864==0){
                 user.getPom().setFun(user.getPom().getFun()-1);
+                json = gson.toJson(user);
+                editor.putString("User", json);
+                editor.commit();
             }
             if(finaltime%259200==0 && !user.getPom().getSick()){
                 Random rand = new Random();
@@ -78,6 +93,9 @@ public class TimerService extends IntentService {
                 if(s==0){
                     user.getPom().setSick(true);
                 }
+                json = gson.toJson(user);
+                editor.putString("User", json);
+                editor.commit();
             }
             if(user.getPom().getHunger()==30){
                 Notification notification =
@@ -150,13 +168,7 @@ public class TimerService extends IntentService {
                 notificationManager.notify(4, notification);
 
             }
-
-
-            json = gson.toJson(user);
-            editor.putString("User", json);
-            editor.putInt("time",finaltime);
-
-
+            editor.putInt("time", finaltime);
             editor.commit();
         }
     }
