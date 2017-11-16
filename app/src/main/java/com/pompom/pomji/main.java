@@ -65,10 +65,11 @@ abstract class Pom {
     protected boolean sick;
 
 
+
     Pom() {
         hunger = 100;
-        energy = 100;
-        clean = 30;
+        energy = 90;
+        clean = 25;
         fun = 100;
         sleep = false;
         sick = false;
@@ -146,6 +147,25 @@ abstract class Pom {
                 return false;
             } else {
                 img.setImageResource(R.drawable.sharknapomclean2_1);
+                return true;
+            }
+        }
+    }
+    public  boolean Sleep(boolean change,ImageView img,int s){
+        if (s <= 50 && s > 30) {
+            if (change) {
+                img.setImageResource(R.drawable.sharknapomsleeping1);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknapomsleeping1_1);
+                return true;
+            }
+        } else {
+            if (change) {
+                img.setImageResource(R.drawable.sharknapomsleeping1);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknapomsleeping1_1);
                 return true;
             }
         }
@@ -333,7 +353,9 @@ public class main extends AppCompatActivity {
     private User user;
     private Pom[] myPom = new Pom[3];
     private boolean cleans = false;
+    private boolean sleepy = false;
     private int coin;
+    private int sum = 0;
 
 
     @Override
@@ -356,6 +378,7 @@ public class main extends AppCompatActivity {
         Button playButton = (Button) findViewById(R.id.playButton);
         Button shopButton = (Button) findViewById(R.id.shopButton);
         Button cleanButton = (Button) findViewById(R.id.cleanButton);
+        Button sleepButton = (Button) findViewById(R.id.sleepButton);
         Button inventoryButton = (Button) findViewById(R.id.inventoryButton);
         final TextView money = (TextView)findViewById(R.id.Money);
 
@@ -384,10 +407,21 @@ public class main extends AppCompatActivity {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cleans = true;
-                editor.putBoolean("clean",cleans);
+                if(!sleepy) cleans = true;
+
             }
         });
+        sleepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(sleepy){
+                    sleepy=false;
+                }else {
+                    sleepy = true;
+                }
+            }
+        });
+
 
 
 
@@ -400,7 +434,6 @@ public class main extends AppCompatActivity {
             editor.putString("User", json);
             editor.putInt("coin",3000);
             editor.putBoolean("first", false);
-            editor.putBoolean("clean", false);
             editor.commit();
         } else {
             String json = shared.getString("User", "");
@@ -455,26 +488,41 @@ public class main extends AppCompatActivity {
                             SharedPreferences.Editor editor = shared.edit();
                             String json = shared.getString("User", "");
                             user = gson.fromJson(json, User.class);
-                            if (cleans){
-                                change = (user.getPom()).Clean(change, pom,user.getPom().getClean());
-                                user.getPom().setClean(user.getPom().getClean()+2);
-                                if (user.getPom().getClean() >= 100) {
-                                    user.getPom().setClean(100);
-                                    cleans = false;
-//                                    editor.putBoolean("clean",cleans);
+
+                            if (sleepy) {
+                                change = (user.getPom()).Sleep(change, pom, user.getPom().getEnergy());
+                                sum+=1;
+                                if(sum==100) {
+                                    user.getPom().setEnergy(user.getPom().getEnergy() + 1);
+                                    sum = 0;
                                 }
                                 json = gson.toJson(user);
                                 editor.putString("User", json);
                                 editor.commit();
-                            }else if (user.getPom().getSick()) {
-                                change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
-                            } else if (user.getPom().getClean() <= 50) {
-                                change = (user.getPom()).Dirty(change, pom, user.getPom().getClean());
-                            } else {
-                                change = (user.getPom()).Move(change, pom);
-                                changePos();
+                            } else{
+
+                                if (cleans) {
+                                    change = (user.getPom()).Clean(change, pom, user.getPom().getClean());
+                                    user.getPom().setClean(user.getPom().getClean() + 2);
+                                    if (user.getPom().getClean() >= 100) {
+                                        user.getPom().setClean(100);
+                                        cleans = false;
+//
+                                    }
+                                    json = gson.toJson(user);
+                                    editor.putString("User", json);
+                                    editor.commit();
+                                } else if (user.getPom().getSick()) {
+                                    change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
+                                } else if (user.getPom().getClean() <= 50) {
+                                    change = (user.getPom()).Dirty(change, pom, user.getPom().getClean());
+                                } else {
+                                    change = (user.getPom()).Move(change, pom);
+                                    changePos();
+                                }
                             }
                         }
+
                     }
                 });
             }

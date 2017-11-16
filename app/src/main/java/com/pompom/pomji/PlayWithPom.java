@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 public class PlayWithPom extends AppCompatActivity implements SensorEventListener {
 
     SensorManager sensorManager;
@@ -47,6 +49,12 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
         super.onPause();
         SharedPreferences shared = getSharedPreferences("my_ref",MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
+        Gson gson = new Gson();
+        String json = shared.getString("User", "");
+        User user = gson.fromJson(json, User.class);
+        user.getPom().setFun((int)count/5);
+        json = gson.toJson(user);
+        editor.putString("User", json);
         editor.putFloat("step",count);
         editor.commit();
         running = false;
