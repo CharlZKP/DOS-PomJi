@@ -99,23 +99,25 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/playButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="168dp"
+            android:layout_height="85dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:fontFamily="@font/upheavtt"
+            android:text="walking"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.983" />
 
-    <Button
-        android:id="@+id/inventoryButton"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="452dp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:fontFamily="@font/upheavtt"
-        android:text="Inventory"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.893"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    </FrameLayout>
 
     <Button
         android:id="@+id/shopButton"
@@ -125,16 +127,16 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         android:layout_marginLeft="100dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="?android:attr/textColorAlertDialogListItem"
         android:fontFamily="@font/upheavtt"
         android:text="Shop"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintHorizontal_bias="0.906"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142" />
+        app:layout_constraintVertical_bias="0.127" />
 
     <Button
         android:id="@+id/cleanButton"
@@ -144,34 +146,57 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         android:layout_marginLeft="200dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@android:color/holo_blue_bright"
         android:fontFamily="@font/upheavtt"
         android:text="Shower"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.906" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/playButton"
+        android:id="@+id/sleepButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
+        android:layout_width="84dp"
+        android:layout_height="36dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_marginBottom="96dp"
+        android:backgroundTint="@android:color/background_light"
         android:fontFamily="@font/upheavtt"
-        android:text="walking"
-        android:textColor="@android:color/white"
+        android:text="Sleep"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.906" />
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/inventoryButton2"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="96dp"
+        android:backgroundTint="@android:color/background_light"
+        android:fontFamily="@font/upheavtt"
+        android:text="Inventory"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.656"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/upheavtt"
+        android:text="0 Coin"
+        tools:layout_editor_absoluteX="276dp"
+        tools:layout_editor_absoluteY="16dp" />
 
 
 </android.support.constraint.ConstraintLayout>
