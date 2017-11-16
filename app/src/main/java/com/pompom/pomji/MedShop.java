@@ -62,8 +62,8 @@ public class MedShop extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_shop, container, false);
-        med[0] = new Medicine(R.drawable.logo,"Med1","eiei",100,1);
-        med[1] = new Medicine(R.drawable.logo,"Med2","eiei",200,2);
+        med[0] = new Medicine(R.drawable.bluebottle,"Med1","eiei",100,1);
+        med[1] = new Medicine(R.drawable.redbottle,"Med2","eiei",200,2);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);

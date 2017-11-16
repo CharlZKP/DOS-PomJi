@@ -68,9 +68,9 @@ public class FoodShop extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_shop, container, false);
-        food[0] = new Food(R.drawable.logo,"Food1","Eat Eat Eat",100,20);
-        food[1] = new Food(R.drawable.logo,"Food2","Eat Eat Eat",200,40);
-        food[2] = new Food(R.drawable.logo,"Food3","Eat Eat Eat",300,80);
+        food[0] = new Food(R.drawable.sushi,"Food1","Eat Eat Eat",100,20);
+        food[1] = new Food(R.drawable.steak,"Food2","Eat Eat Eat",200,40);
+        food[2] = new Food(R.drawable.berger,"Food3","Eat Eat Eat",300,80);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);

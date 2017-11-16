@@ -72,7 +72,6 @@ public class MyFood extends Fragment {
         View rootView = inflater.inflate(R.layout.food_inventory, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodInventory);
         customAdapter = new MyFood.CustomAdapter();
-
         listView.setAdapter(customAdapter);
 
         SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);

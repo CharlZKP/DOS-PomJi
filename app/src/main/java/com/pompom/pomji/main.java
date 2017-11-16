@@ -131,10 +131,24 @@ abstract class Pom {
     protected void Eat() {
 
     }
-    public boolean Clean(boolean change,ImageView img){
-        img.setImageResource(R.drawable.sharknapom);
-        return true;
-
+    public boolean Clean(boolean change,ImageView img,int k){
+        if (k <= 50 && k > 30) {
+            if (change) {
+                img.setImageResource(R.drawable.sharknapomclean1);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknapomclean2);
+                return true;
+            }
+        } else {
+            if (change) {
+                img.setImageResource(R.drawable.sharknapomclean1_1);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknapomclean2_1);
+                return true;
+            }
+        }
     }
 
 }
@@ -442,7 +456,7 @@ public class main extends AppCompatActivity {
                             String json = shared.getString("User", "");
                             user = gson.fromJson(json, User.class);
                             if (cleans){
-                                change = (user.getPom()).Clean(change, pom);
+                                change = (user.getPom()).Clean(change, pom,user.getPom().getClean());
                                 user.getPom().setClean(user.getPom().getClean()+2);
                                 if (user.getPom().getClean() >= 100) {
                                     user.getPom().setClean(100);
