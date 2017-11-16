@@ -7,6 +7,7 @@
     android:background="@drawable/bg_main"
     tools:context="com.pompom.pomji.main">
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -51,23 +52,25 @@
 
     </FrameLayout>
 
+
     <Button
         android:id="@+id/playButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="168dp"
+
         android:layout_height="85dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@android:color/holo_orange_dark"
         android:fontFamily="@font/upheavtt"
         android:text="walking"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/home"
+        app:layout_constraintRight_toLeftOf="@id/cleanButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        android:layout_width="wrap_content" />
 
     <Button
         android:id="@+id/shopButton"
@@ -75,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="100dp"
         android:backgroundTint="?android:attr/textColorAlertDialogListItem"
         android:fontFamily="@font/upheavtt"
@@ -91,37 +94,36 @@
     <Button
         android:id="@+id/cleanButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="188dp"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="200dp"
+        android:layout_marginBottom="10dp"
+
         android:backgroundTint="@android:color/holo_blue_bright"
         android:fontFamily="@font/upheavtt"
         android:text="Shower"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/playButton"
+        app:layout_constraintRight_toRightOf="@+id/home"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/sleepButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="84dp"
+        android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="96dp"
         android:backgroundTint="@android:color/background_light"
         android:fontFamily="@font/upheavtt"
         android:text="Sleep"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cleanButton"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintLeft_toRightOf="@id/inventoryButton"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <Button
         android:id="@+id/inventoryButton"
@@ -129,29 +131,44 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="96dp"
         android:backgroundTint="@android:color/background_light"
         android:fontFamily="@font/upheavtt"
-        android:text="Inventory"
+        android:text="Bag"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.656"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toLeftOf="@id/sleepButton"
+        app:layout_constraintLeft_toRightOf="@id/playButton"
+        app:layout_constraintBottom_toTopOf="@id/cleanButton"
+        app:layout_constraintHorizontal_bias="0.656" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/Money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/upheavtt"
-        android:text="0 Coin"
-        tools:layout_editor_absoluteX="276dp"
+        android:text="1997"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintRight_toLeftOf="@id/Coin"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="257dp"
+        tools:layout_editor_absoluteY="16dp" />
+    <TextView
+        android:id="@+id/Coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/upheavtt"
+        android:text="Coin"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="257dp"
         tools:layout_editor_absoluteY="16dp" />
 
     <ProgressBar
         android:id="@+id/energybar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="163dp"
+        android:layout_width="150dp"
         android:layout_height="12dp"
         android:layout_gravity="bottom"
         android:max="100"
@@ -165,7 +182,7 @@
     <ProgressBar
         android:id="@+id/funbar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="163dp"
+        android:layout_width="150dp"
         android:layout_height="12dp"
         android:layout_gravity="bottom"
         android:max="100"
@@ -179,7 +196,7 @@
     <ProgressBar
         android:id="@+id/hungerbar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="163dp"
+        android:layout_width="150dp"
         android:layout_height="12dp"
         android:layout_gravity="bottom"
         android:max="100"
@@ -193,7 +210,7 @@
     <ProgressBar
         android:id="@+id/cleanbar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="163dp"
+        android:layout_width="150dp"
         android:layout_height="12dp"
         android:layout_gravity="bottom"
         android:backgroundTint="@android:color/holo_blue_dark"
