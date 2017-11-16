@@ -343,6 +343,7 @@ public class main extends AppCompatActivity {
         Button shopButton = (Button) findViewById(R.id.shopButton);
         Button cleanButton = (Button) findViewById(R.id.cleanButton);
         Button inventoryButton = (Button) findViewById(R.id.inventoryButton);
+        final TextView money = (TextView)findViewById(R.id.Money);
 
         inventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,7 +383,6 @@ public class main extends AppCompatActivity {
             user.setName(shared.getString("userName", "None"));
             user.buyPom();
             String json = gson.toJson(user);
-//            Log.v("json",json);
             editor.putString("User", json);
             editor.putInt("coin",3000);
             editor.putBoolean("first", false);
@@ -409,6 +409,23 @@ public class main extends AppCompatActivity {
         fb.decrease(shared);
         hb.decrease(shared);
         pomAnimation();
+        Timer timer2 = new Timer();
+        timer2.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
+                        coin = shared.getInt("coin",0);
+//                        Log.v("money",String.valueOf(coin));
+                        money.setText(String.valueOf(coin));
+                    }
+                });
+            }
+        }, 0, 500);
+
+
     }
 
     public void pomAnimation() {

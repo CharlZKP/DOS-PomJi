@@ -57,7 +57,7 @@ public class MedShop extends Fragment {
     private Medicine[] med = new Medicine[2];
 
     private ArrayList<MedInventory> mymed = new ArrayList<>();
-    private ArrayList<String> check = new ArrayList<>();
+    private ArrayList<String> checkmed = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class MedShop extends Fragment {
         Gson gson = new Gson();
 
         SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
-        String json = shared.getString("food","");
+        String json = shared.getString("med","");
         Type type = new TypeToken<ArrayList<MedInventory>>(){}.getType();
         mymed = gson.fromJson(json, type);
 
@@ -81,9 +81,9 @@ public class MedShop extends Fragment {
 
         json = shared.getString("checkmed","");
         type = new TypeToken<ArrayList<String>>(){}.getType();
-        check = gson.fromJson(json,type);
-        if (check == null) {
-            check = new ArrayList<>();
+        checkmed = gson.fromJson(json,type);
+        if (checkmed == null) {
+            checkmed = new ArrayList<>();
         }
 
         return rootView;
@@ -129,16 +129,16 @@ public class MedShop extends Fragment {
                         Toast.makeText(getContext(),"Buy successful.", Toast.LENGTH_LONG).show();
                         editor.putInt("coin", shared.getInt("coin", 0) - med[i].getPrice());
 
-                        if(check.contains(med[i].getName())){
-                            mymed.get(check.indexOf(med[i].getName())).addItem();
+                        if(checkmed.contains(med[i].getName())){
+                            mymed.get(checkmed.indexOf(med[i].getName())).addItem();
                         }else{
-                            check.add(med[i].getName());
+                            checkmed.add(med[i].getName());
                             mymed.add(new MedInventory(med[i],1));
                         }
                         Gson gson = new Gson();
                         String json = gson.toJson(mymed);
                         editor.putString("med",json);
-                        json = gson.toJson(check);
+                        json = gson.toJson(checkmed);
                         editor.putString("checkmed",json);
                     }
                     editor.commit();
