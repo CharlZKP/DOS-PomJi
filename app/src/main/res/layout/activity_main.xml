@@ -69,8 +69,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/home"
         app:layout_constraintRight_toLeftOf="@id/cleanButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:layout_width="wrap_content" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/shopButton"
