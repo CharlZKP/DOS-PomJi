@@ -1,5 +1,6 @@
 package com.pompom.pomji;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,60 +17,89 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class InventoryItem{
-    private ArrayList<Food> food = new ArrayList<Food>();
-    private ArrayList<Medicine> medicines = new ArrayList<Medicine>();
-    private ArrayList<Integer> foodQuantity = new ArrayList<Integer>();
-    private ArrayList<Integer> medQuantity = new ArrayList<Integer>();
+class FoodInventory{
+    private Food food;
+    private int quantity;
 
-    public ArrayList<Food> getFood(){
+    FoodInventory(Food food, int quantity){
+        this.food = food;
+        this.quantity = quantity;
+    }
+
+    public void setFood(Food food){
+        this.food = food;
+    }
+
+    public void addItem(){
+        quantity++;
+    }
+
+    public void useItem(){
+        quantity-=1;
+    }
+
+    public Food getFood(){
         return food;
     }
-    public ArrayList<Medicine> getMedicines(){
-        return medicines;
-    }
-    public void popFood(int i){
-        food.remove(i);
-    }
-    public void popFoodQuantity(int i){
-        foodQuantity.remove(i);
-    }
-    public int getFoodQuantity(int i){
-        return foodQuantity.get(i);
-    }
-    public int getMedQuantity(int i){
-        return medQuantity.get(i);
-    }
-    public void useFood(int i){
-        foodQuantity.set(i,getFoodQuantity(i)-1);
+
+    public int getQuantity(){
+        return quantity;
     }
 }
 
+
 public class MyFood extends Fragment {
 
-    private InventoryItem inventoryItem = new InventoryItem();
+    private ArrayList<FoodInventory> food = new ArrayList<>();
+    private ArrayList<String> check = new ArrayList<>();
+    private MyFood.CustomAdapter customAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Gson gson = new Gson();
         View rootView = inflater.inflate(R.layout.food_inventory, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodInventory);
-        MyFood.CustomAdapter customAdapter = new MyFood.CustomAdapter();
+        customAdapter = new MyFood.CustomAdapter();
+
         listView.setAdapter(customAdapter);
+
+        SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
+
+        String json = shared.getString("food","");
+        Type type = new TypeToken<ArrayList<FoodInventory>>(){}.getType();
+        food = gson.fromJson(json, type);
+
+        if (food == null) {
+            food = new ArrayList<>();
+        }
+
+        json = shared.getString("checkfood","");
+        type = new TypeToken<ArrayList<String>>(){}.getType();
+        check = gson.fromJson(json,type);
+        if (check == null) {
+            check = new ArrayList<>();
+        }
 
         return rootView;
     }
 
     class CustomAdapter extends BaseAdapter {
-        private Context mContext;
 
         @Override
         public int getCount() {
-            return inventoryItem.getFood().size();
+            return food.size();
         }
 
         @Override
@@ -94,21 +124,30 @@ public class MyFood extends Fragment {
             useButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = shared.edit();
-                    inventoryItem.useFood(i);
-                    if(inventoryItem.getFoodQuantity(i)==0){
-                        inventoryItem.popFood(i);
-                        inventoryItem.popFoodQuantity(i);
+                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shared.edit();
+                    food.get(i).useItem();
+                    if(food.get(i).getQuantity()==0){
+                        food.remove(i);
+                        check.remove(i);
                     }
+                    Gson gson = new Gson();
+                    String json = gson.toJson(food);
+                    editor.putString("food",json);
+                    json = gson.toJson(check);
+                    editor.putString("checkfood",json);
+                    editor.commit();
+                    customAdapter.notifyDataSetChanged();
+                    Intent intent = new Intent(getContext(), main.class);
+                    startActivity(intent);
                 }
             });
 
 
-            imageView.setImageResource(inventoryItem.getFood().get(i).getImg());
-            txtName.setText(inventoryItem.getFood().get(i).getName());
-            txtValue.setText(String.valueOf(inventoryItem.getFood().get(i).getEnergy()));
-            txtQuantity.setText(String.valueOf(inventoryItem.getFoodQuantity(i)));
+            imageView.setImageResource(food.get(i).getFood().getImg());
+            txtName.setText(food.get(i).getFood().getName());
+            txtValue.setText(String.valueOf(food.get(i).getFood().getEnergy()));
+            txtQuantity.setText(String.valueOf(food.get(i).getQuantity()));
 
             return view;
         }

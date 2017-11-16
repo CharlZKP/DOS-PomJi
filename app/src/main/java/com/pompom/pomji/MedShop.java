@@ -16,6 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -51,6 +55,9 @@ class Medicine{
 
 public class MedShop extends Fragment {
     private Medicine[] med = new Medicine[2];
+
+    private ArrayList<MedInventory> mymed = new ArrayList<>();
+    private ArrayList<String> check = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +67,25 @@ public class MedShop extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
+
+        Gson gson = new Gson();
+
+        SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
+        String json = shared.getString("food","");
+        Type type = new TypeToken<ArrayList<MedInventory>>(){}.getType();
+        mymed = gson.fromJson(json, type);
+
+        if (mymed == null) {
+            mymed = new ArrayList<>();
+        }
+
+        json = shared.getString("checkmed","");
+        type = new TypeToken<ArrayList<String>>(){}.getType();
+        check = gson.fromJson(json,type);
+        if (check == null) {
+            check = new ArrayList<>();
+        }
+
         return rootView;
     }
 
@@ -100,7 +126,20 @@ public class MedShop extends Fragment {
                     if(shared.getInt("coin",0)-med[i].getPrice()<0){
                         Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
                     }else {
+                        Toast.makeText(getContext(),"Buy successful.", Toast.LENGTH_LONG).show();
                         editor.putInt("coin", shared.getInt("coin", 0) - med[i].getPrice());
+
+                        if(check.contains(med[i].getName())){
+                            mymed.get(check.indexOf(med[i].getName())).addItem();
+                        }else{
+                            check.add(med[i].getName());
+                            mymed.add(new MedInventory(med[i],1));
+                        }
+                        Gson gson = new Gson();
+                        String json = gson.toJson(mymed);
+                        editor.putString("med",json);
+                        json = gson.toJson(check);
+                        editor.putString("checkmed",json);
                     }
                     editor.commit();
                     Log.v("money",String.valueOf(shared.getInt("coin",0)));

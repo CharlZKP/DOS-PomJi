@@ -1,5 +1,6 @@
 package com.pompom.pomji;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,27 +17,80 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 import static android.content.Context.MODE_PRIVATE;
 
+class MedInventory{
+    private Medicine med;
+    private int quantity;
+
+    MedInventory(Medicine med, int quantity){
+        this.med = med;
+        this.quantity = quantity;
+    }
+
+    public void addItem(){
+        quantity++;
+    }
+
+    public void useItem(){
+        quantity-=1;
+    }
+
+    public Medicine getMed(){
+        return med;
+    }
+
+    public int getQuantity(){
+        return quantity;
+    }
+}
+
 public class MyMed extends Fragment {
+
+    private ArrayList<MedInventory> mymed = new ArrayList<>();
+    private ArrayList<String> checkmed = new ArrayList<>();
+    private MyMed.CustomAdapter customAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Gson gson = new Gson();
         View rootView = inflater.inflate(R.layout.med_inventory, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.lsMedInventory);
-        MyMed.CustomAdapter customAdapter = new MyMed.CustomAdapter();
+        customAdapter = new MyMed.CustomAdapter();
         listView.setAdapter(customAdapter);
+
+        SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
+
+        String json = shared.getString("med","");
+        Type type = new TypeToken<ArrayList<MedInventory>>(){}.getType();
+        mymed = gson.fromJson(json, type);
+
+        if (mymed == null) {
+            mymed = new ArrayList<>();
+        }
+
+        json = shared.getString("checkmed","");
+        type = new TypeToken<ArrayList<String>>(){}.getType();
+        checkmed = gson.fromJson(json,type);
+        if (checkmed == null) {
+            checkmed = new ArrayList<>();
+        }
 
         return rootView;
     }
 
     class CustomAdapter extends BaseAdapter {
-        private Context mContext;
 
         @Override
         public int getCount() {
-            return 2;
+            return mymed.size();
         }
 
         @Override
@@ -51,35 +105,40 @@ public class MyMed extends Fragment {
 
         @Override
         public View getView(final int i,View view,ViewGroup viewGroup){
-            view = getLayoutInflater().inflate(R.layout.cutom_shop_layout,null);
-//            ImageView imageView = (ImageView) view.findViewById(R.id.imgItem);
-//            TextView txtName = (TextView) view.findViewById(R.id.txtItemName);
-//            TextView txtDes = (TextView) view.findViewById(R.id.txtItemDescription);
-//            TextView txtValue = (TextView) view.findViewById(R.id.txtItemValue);
-//            TextView txtPrice = (TextView) view.findViewById(R.id.txtItemPrice);
-//            Button buyButton = (Button) view.findViewById(R.id.buyButton);
-//
-//            buyButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = shared.edit();
-//                    if(shared.getInt("coin",0)-food[i].getPrice()<0){
-//                        Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
-//                    }else {
-//                        editor.putInt("coin", shared.getInt("coin", 0) - food[i].getPrice());
-//                    }
-//                    editor.commit();
-//                    Log.v("money",String.valueOf(shared.getInt("coin",0)));
-//                }
-//            });
-//
-//
-//            imageView.setImageResource(food[i].getImg());
-//            txtName.setText(food[i].getName());
-//            txtDes.setText(food[i].getDescription());
-//            txtValue.setText(String.valueOf(food[i].getEnergy()));
-//            txtPrice.setText(String.valueOf(food[i].getPrice()));
+            view = getLayoutInflater().inflate(R.layout.cutom_inventory_layout,null);
+            ImageView imageView = (ImageView) view.findViewById(R.id.imgItem);
+            TextView txtName = (TextView) view.findViewById(R.id.txtItemName);
+            TextView txtValue = (TextView) view.findViewById(R.id.txtItemValue);
+            TextView txtQuantity = (TextView) view.findViewById(R.id.txtItemQuantity);
+            Button useButton = (Button) view.findViewById(R.id.useButton);
+
+            useButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = shared.edit();
+                    mymed.get(i).useItem();
+                    if(mymed.get(i).getQuantity()==0){
+                        mymed.remove(i);
+                        checkmed.remove(i);
+                    }
+                    Gson gson = new Gson();
+                    String json = gson.toJson(mymed);
+                    editor.putString("med",json);
+                    json = gson.toJson(checkmed);
+                    editor.putString("checkmed",json);
+                    editor.commit();
+                    customAdapter.notifyDataSetChanged();
+                    Intent intent = new Intent(getContext(), main.class);
+                    startActivity(intent);
+                }
+            });
+
+
+            imageView.setImageResource(mymed.get(i).getMed().getImg());
+            txtName.setText(mymed.get(i).getMed().getName());
+            txtValue.setText(String.valueOf(mymed.get(i).getMed().getCure()));
+            txtQuantity.setText(String.valueOf(mymed.get(i).getQuantity()));
 
             return view;
         }

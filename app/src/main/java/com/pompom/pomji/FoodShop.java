@@ -19,6 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -57,6 +61,9 @@ class Food{
 public class FoodShop extends Fragment {
     private Food[] food = new Food[3];
 
+    private ArrayList<FoodInventory> myfood = new ArrayList<>();
+    private ArrayList<String> check = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,11 +75,28 @@ public class FoodShop extends Fragment {
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
 
+        Gson gson = new Gson();
+
+        SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
+        String json = shared.getString("food","");
+        Type type = new TypeToken<ArrayList<FoodInventory>>(){}.getType();
+        myfood = gson.fromJson(json, type);
+
+        if (myfood == null) {
+            myfood = new ArrayList<>();
+        }
+
+        json = shared.getString("checkfood","");
+        type = new TypeToken<ArrayList<String>>(){}.getType();
+        check = gson.fromJson(json,type);
+        if (check == null) {
+            check = new ArrayList<>();
+        }
+
         return rootView;
     }
 
     class CustomAdapter extends BaseAdapter{
-        private Context mContext;
 
         @Override
         public int getCount() {
@@ -107,10 +131,22 @@ public class FoodShop extends Fragment {
                     if(shared.getInt("coin",0)-food[i].getPrice()<0){
                         Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
                     }else {
+                        Toast.makeText(getContext(),"Buy successful.", Toast.LENGTH_LONG).show();
                         editor.putInt("coin", shared.getInt("coin", 0) - food[i].getPrice());
+//                        Log.v("shop",String.valueOf(check.contains(food[i].getName())));
+                        if(check.contains(food[i].getName())){
+                            myfood.get(check.indexOf(food[i].getName())).addItem();
+                        }else{
+                            check.add(food[i].getName());
+                            myfood.add(new FoodInventory(food[i],1));
+                        }
+                        Gson gson = new Gson();
+                        String json = gson.toJson(myfood);
+                        editor.putString("food",json);
+                        json = gson.toJson(check);
+                        editor.putString("checkfood",json);
                     }
                     editor.commit();
-                    Log.v("money",String.valueOf(shared.getInt("coin",0)));
                 }
             });
 

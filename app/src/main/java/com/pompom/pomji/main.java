@@ -382,7 +382,7 @@ public class main extends AppCompatActivity {
             user.setName(shared.getString("userName", "None"));
             user.buyPom();
             String json = gson.toJson(user);
-            Log.v("json",json);
+//            Log.v("json",json);
             editor.putString("User", json);
             editor.putInt("coin",3000);
             editor.putBoolean("first", false);
