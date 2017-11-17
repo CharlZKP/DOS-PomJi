@@ -65,7 +65,6 @@ abstract class Pom {
     protected boolean sick;
 
 
-
     Pom() {
         hunger = 100;
         energy = 50;
@@ -132,7 +131,8 @@ abstract class Pom {
     protected void Eat() {
 
     }
-    public boolean Clean(boolean change,ImageView img,int k){
+
+    public boolean Clean(boolean change, ImageView img, int k) {
         if (k <= 50 && k > 30) {
             if (change) {
                 img.setImageResource(R.drawable.sharknapomclean1);
@@ -151,26 +151,16 @@ abstract class Pom {
             }
         }
     }
-    public  boolean Sleep(boolean change,ImageView img,int s){
-        if (s <= 50 && s > 30) {
-            if (change) {
-                img.setImageResource(R.drawable.sharknapomsleeping1);
-                return false;
-            } else {
-                img.setImageResource(R.drawable.sharknapomsleeping1_1);
-                return true;
-            }
+
+    public boolean Sleep(boolean change, ImageView img) {
+        if (change) {
+            img.setImageResource(R.drawable.sharknapomsleeping1);
+            return false;
         } else {
-            if (change) {
-                img.setImageResource(R.drawable.sharknapomsleeping1);
-                return false;
-            } else {
-                img.setImageResource(R.drawable.sharknapomsleeping1_1);
-                return true;
-            }
+            img.setImageResource(R.drawable.sharknapomsleeping1_1);
+            return true;
         }
     }
-
 }
 
 class Sharknapom extends Pom {
@@ -179,7 +169,6 @@ class Sharknapom extends Pom {
     Sharknapom() {
         super();
     }
-
 
 
     public boolean Move(boolean change, ImageView img) {
@@ -351,7 +340,7 @@ public class main extends AppCompatActivity {
     private Handler handler = new Handler();
     private boolean change = false;
     private User user;
-    private Pom[] myPom = new Pom[3];
+//    private Pom[] myPom = new Pom[3];
     private boolean cleans = false;
     private boolean sleepy = false;
     private int coin;
@@ -380,13 +369,15 @@ public class main extends AppCompatActivity {
         Button cleanButton = (Button) findViewById(R.id.cleanButton);
         Button sleepButton = (Button) findViewById(R.id.sleepButton);
         Button inventoryButton = (Button) findViewById(R.id.inventoryButton);
-        final TextView money = (TextView)findViewById(R.id.Money);
+        final TextView money = (TextView) findViewById(R.id.Money);
 
         inventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(main.this, Inventory.class);
-                startActivity(intent);
+                if(!sleepy) {
+                    Intent intent = new Intent(main.this, Inventory.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -407,23 +398,20 @@ public class main extends AppCompatActivity {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!sleepy) cleans = true;
+                if (!sleepy) cleans = true;
 
             }
         });
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(sleepy){
-                    sleepy=false;
-                }else {
+                if (sleepy) {
+                    sleepy = false;
+                } else {
                     sleepy = true;
                 }
             }
         });
-
-
-
 
 
         if (first) {
@@ -432,13 +420,13 @@ public class main extends AppCompatActivity {
             user.buyPom();
             String json = gson.toJson(user);
             editor.putString("User", json);
-            editor.putInt("coin",3000);
+            editor.putInt("coin", 3000);
             editor.putBoolean("first", false);
             editor.commit();
         } else {
             String json = shared.getString("User", "");
             user = gson.fromJson(json, User.class);
-            coin = shared.getInt("coin",0);
+            coin = shared.getInt("coin", 0);
         }
 
         userName.setText(user.getName());
@@ -464,8 +452,7 @@ public class main extends AppCompatActivity {
                     @Override
                     public void run() {
                         SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
-                        coin = shared.getInt("coin",0);
-//                        Log.v("money",String.valueOf(coin));
+                        coin = shared.getInt("coin", 0);
                         money.setText(String.valueOf(coin));
                     }
                 });
@@ -473,6 +460,17 @@ public class main extends AppCompatActivity {
         }, 0, 500);
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,  int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==100){
+            if(resultCode==RESULT_OK){
+                int energy = data.getIntExtra("Energy",0);
+                user.getPom().setEnergy(user.getPom().getEnergy()+energy);
+            }
+        }
     }
 
     public void pomAnimation() {
@@ -490,28 +488,34 @@ public class main extends AppCompatActivity {
                             user = gson.fromJson(json, User.class);
 
                             if (sleepy) {
-                                change = (user.getPom()).Sleep(change, pom, user.getPom().getEnergy());
-                                sum+=1;
-                                if(sum==500) {
+                                change = (user.getPom()).Sleep(change, pom);
+                                sum += 1;
+                                if (sum == 500) {
                                     user.getPom().setEnergy(user.getPom().getEnergy() + 1);
                                     sum = 0;
                                 }
-                                json = gson.toJson(user);
-                                editor.putString("User", json);
-                                editor.commit();
-                            } else{
+                                if (user.getPom().getEnergy() > 100) {
+                                    user.getPom().setEnergy(100);
+                                }else{
+                                    json = gson.toJson(user);
+                                    editor.putString("User", json);
+                                    editor.commit();
+                                }
+
+                            } else {
 
                                 if (cleans) {
                                     change = (user.getPom()).Clean(change, pom, user.getPom().getClean());
                                     user.getPom().setClean(user.getPom().getClean() + 2);
-                                    if (user.getPom().getClean() >= 100) {
+                                    if (user.getPom().getClean() > 100) {
                                         user.getPom().setClean(100);
                                         cleans = false;
 //
+                                    }else{
+                                        json = gson.toJson(user);
+                                        editor.putString("User", json);
+                                        editor.commit();
                                     }
-                                    json = gson.toJson(user);
-                                    editor.putString("User", json);
-                                    editor.commit();
                                 } else if (user.getPom().getSick()) {
                                     change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
                                 } else if (user.getPom().getClean() <= 50) {
@@ -550,8 +554,8 @@ public class main extends AppCompatActivity {
     }
 
     public boolean onTouchEvent(MotionEvent me) {
-        if (me.getAction() == MotionEvent.ACTION_DOWN && user.getPom().getClean() > 50 &&
-                !user.getPom().getSick() && user.getPom().getHunger() > 50 && user.getPom().getEnergy() > 50) {
+        if (me.getAction() == MotionEvent.ACTION_DOWN && !cleans &&
+                !user.getPom().getSick() && user.getPom().getHunger() > 50 && !sleepy) {
             touch = true;
             if (user.getPom().getFun() > 50) {
                 pom.setImageResource(R.drawable.sharknapom_happy);

@@ -1,5 +1,6 @@
 package com.pompom.pomji;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -123,22 +124,30 @@ public class MyFood extends Fragment {
             useButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Gson gson = new Gson();
                     SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
                     food.get(i).useItem();
+                    String json = shared.getString("User", "");
+                    User user = gson.fromJson(json, User.class);
+                    user.getPom().setHunger(user.getPom().getHunger()+food.get(i).getFood().getEnergy());
+                    if(user.getPom().getHunger()>100){
+                        user.getPom().setHunger(100);
+                    }
+                    json = gson.toJson(user);
+                    editor.putString("User", json);
                     if(food.get(i).getQuantity()==0){
                         food.remove(i);
                         check.remove(i);
                     }
-                    Gson gson = new Gson();
-                    String json = gson.toJson(food);
+                    json = gson.toJson(food);
                     editor.putString("food",json);
                     json = gson.toJson(check);
                     editor.putString("checkfood",json);
-                    editor.commit();
                     customAdapter.notifyDataSetChanged();
-                    Intent intent = new Intent(getContext(), main.class);
-                    startActivity(intent);
+                    editor.commit();
+                    Activity activity = (Activity)getContext();
+                    activity.finish();
                 }
             });
 
