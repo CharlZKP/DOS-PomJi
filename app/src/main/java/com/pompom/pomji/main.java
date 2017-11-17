@@ -68,7 +68,7 @@ abstract class Pom {
 
     Pom() {
         hunger = 100;
-        energy = 90;
+        energy = 50;
         clean = 25;
         fun = 100;
         sleep = false;
@@ -492,7 +492,7 @@ public class main extends AppCompatActivity {
                             if (sleepy) {
                                 change = (user.getPom()).Sleep(change, pom, user.getPom().getEnergy());
                                 sum+=1;
-                                if(sum==100) {
+                                if(sum==500) {
                                     user.getPom().setEnergy(user.getPom().getEnergy() + 1);
                                     sum = 0;
                                 }
