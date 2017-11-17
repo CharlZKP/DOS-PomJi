@@ -66,9 +66,9 @@ abstract class Pom {
 
 
     Pom() {
-        hunger = 100;
-        energy = 50;
-        clean = 25;
+        hunger = 50;
+        energy = 100;
+        clean = 50;
         fun = 100;
         sleep = false;
         sick = false;
@@ -116,6 +116,9 @@ abstract class Pom {
 
     abstract boolean Dirty(boolean change, ImageView img, int c);
 
+    abstract boolean Hungry(boolean change, ImageView img, int h);
+
+
     protected boolean getSick() {
         return sick;
     }
@@ -131,6 +134,7 @@ abstract class Pom {
     protected void Eat() {
 
     }
+
 
     public boolean Clean(boolean change, ImageView img, int k) {
         if (k <= 50 && k > 30) {
@@ -212,16 +216,40 @@ class Sharknapom extends Pom {
         }
     }
 
+    public boolean Hungry(boolean change, ImageView img, int h) {
+        if (h <= 50 && h > 30) {
+            if (change) {
+                img.setImageResource(R.drawable.sharknnapomhungry1);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknnapomhungry1_1);
+                return true;
+            }
+        } else {
+            if (change) {
+                img.setImageResource(R.drawable.sharknnapomhungry1);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknnapomhungry1_1);
+                return true;
+            }
+        }
+    }
+
     public boolean Sick(boolean change, ImageView img) {
         return true;
     }
+
 }
+
 
 class Udinopom extends Pom {
     public Udinopom() {
         super();
     }
-
+    public boolean Hungry(boolean change, ImageView img, int h) {
+        return true;
+    }
     public boolean Dirty(boolean change, ImageView img, int c) {
         return true;
     }
@@ -340,7 +368,7 @@ public class main extends AppCompatActivity {
     private Handler handler = new Handler();
     private boolean change = false;
     private User user;
-//    private Pom[] myPom = new Pom[3];
+    //    private Pom[] myPom = new Pom[3];
     private boolean cleans = false;
     private boolean sleepy = false;
     private int coin;
@@ -374,7 +402,7 @@ public class main extends AppCompatActivity {
         inventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!sleepy) {
+                if (!sleepy) {
                     Intent intent = new Intent(main.this, Inventory.class);
                     startActivity(intent);
                 }
@@ -463,12 +491,12 @@ public class main extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode,  int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode==100){
-            if(resultCode==RESULT_OK){
-                int energy = data.getIntExtra("Energy",0);
-                user.getPom().setEnergy(user.getPom().getEnergy()+energy);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                int energy = data.getIntExtra("Energy", 0);
+                user.getPom().setEnergy(user.getPom().getEnergy() + energy);
             }
         }
     }
@@ -496,7 +524,7 @@ public class main extends AppCompatActivity {
                                 }
                                 if (user.getPom().getEnergy() > 100) {
                                     user.getPom().setEnergy(100);
-                                }else{
+                                } else {
                                     json = gson.toJson(user);
                                     editor.putString("User", json);
                                     editor.commit();
@@ -511,11 +539,13 @@ public class main extends AppCompatActivity {
                                         user.getPom().setClean(100);
                                         cleans = false;
 //
-                                    }else{
+                                    } else {
                                         json = gson.toJson(user);
                                         editor.putString("User", json);
                                         editor.commit();
                                     }
+                                } else if (user.getPom().getHunger() <= 50) {
+                                    change = (user.getPom()).Hungry(change, pom, user.getPom().getHunger());
                                 } else if (user.getPom().getSick()) {
                                     change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
                                 } else if (user.getPom().getClean() <= 50) {
