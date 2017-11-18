@@ -7,6 +7,7 @@
     tools:context="com.pompom.pomji.SplashScreen">
 
     <ImageView
+        android:id="@+id/logo"
         android:layout_width="269dp"
         android:layout_height="462dp"
         android:src="@drawable/pompom"
