@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.pompom.pomji.Shop">
+    tools:context="com.pompom.pomji.Shop"
+    android:background="@drawable/bg_bag">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
