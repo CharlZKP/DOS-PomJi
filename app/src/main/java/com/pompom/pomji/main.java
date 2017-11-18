@@ -3,6 +3,7 @@ package com.pompom.pomji;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -427,16 +428,18 @@ public class main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!sleepy) cleans = true;
-
             }
         });
         sleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.all);
                 if (sleepy) {
                     sleepy = false;
+                    cl.setBackgroundResource(R.drawable.bg_main);
                 } else {
                     sleepy = true;
+                    cl.setBackgroundResource(R.drawable.bg_main_night);
                 }
             }
         });
