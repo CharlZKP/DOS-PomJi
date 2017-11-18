@@ -88,6 +88,9 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
         String json = shared.getString("User", "");
         User user = gson.fromJson(json, User.class);
         user.getPom().setFun((int) count / 5);
+        if(user.getPom().getFun()>100){
+            user.getPom().setFun(100);
+        }
         json = gson.toJson(user);
         editor.putString("User", json);
         editor.putFloat("step", count);
