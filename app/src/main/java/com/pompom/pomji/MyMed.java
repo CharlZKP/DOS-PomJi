@@ -1,5 +1,6 @@
 package com.pompom.pomji;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -115,22 +116,28 @@ public class MyMed extends Fragment {
             useButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Gson gson = new Gson();
                     SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
+                    String json = shared.getString("User", "");
+                    User user = gson.fromJson(json, User.class);
+                    user.getPom().setSick(false);
                     mymed.get(i).useItem();
+                    json = gson.toJson(user);
+                    editor.putString("User", json);
                     if(mymed.get(i).getQuantity()==0){
                         mymed.remove(i);
                         checkmed.remove(i);
                     }
-                    Gson gson = new Gson();
-                    String json = gson.toJson(mymed);
+
+                    json = gson.toJson(mymed);
                     editor.putString("med",json);
                     json = gson.toJson(checkmed);
                     editor.putString("checkmed",json);
                     editor.commit();
                     customAdapter.notifyDataSetChanged();
-                    Intent intent = new Intent(getContext(), main.class);
-                    startActivity(intent);
+                    Activity activity = (Activity)getContext();
+                    activity.finish();
                 }
             });
 
