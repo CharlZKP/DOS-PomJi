@@ -68,8 +68,8 @@ abstract class Pom {
 
     Pom() {
         hunger = 50;
-        energy = 100;
-        clean = 50;
+        energy = 50;
+        clean = 60;
         fun = 100;
         sleep = false;
         sick = false;
@@ -118,6 +118,8 @@ abstract class Pom {
     abstract boolean Dirty(boolean change, ImageView img, int c);
 
     abstract boolean Hungry(boolean change, ImageView img, int h);
+
+    abstract boolean Sleepy(boolean change, ImageView img, int j);
 
 
     protected boolean getSick() {
@@ -220,18 +222,38 @@ class Sharknapom extends Pom {
     public boolean Hungry(boolean change, ImageView img, int h) {
         if (h <= 50 && h > 30) {
             if (change) {
-                img.setImageResource(R.drawable.sharknnapomhungry1);
+                img.setImageResource(R.drawable.sharknapomhungry1);
                 return false;
             } else {
-                img.setImageResource(R.drawable.sharknnapomhungry1_1);
+                img.setImageResource(R.drawable.sharknapomhungry1_1);
                 return true;
             }
         } else {
             if (change) {
-                img.setImageResource(R.drawable.sharknnapomhungry1);
+                img.setImageResource(R.drawable.sharknapomhungry1);
                 return false;
             } else {
-                img.setImageResource(R.drawable.sharknnapomhungry1_1);
+                img.setImageResource(R.drawable.sharknapomhungry1_1);
+                return true;
+            }
+        }
+    }
+
+    public boolean Sleepy(boolean change, ImageView img, int j) {
+        if (j <= 50 && j > 30) {
+            if (change) {
+                img.setImageResource(R.drawable.sharknapomsleepy);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknapomsleepy1_1);
+                return true;
+            }
+        } else {
+            if (change) {
+                img.setImageResource(R.drawable.sharknapomsleepy);
+                return false;
+            } else {
+                img.setImageResource(R.drawable.sharknapomsleepy1_1);
                 return true;
             }
         }
@@ -254,6 +276,7 @@ class Udinopom extends Pom {
     public boolean Dirty(boolean change, ImageView img, int c) {
         return true;
     }
+    public boolean Sleepy(boolean change, ImageView img,int s){ return true;}
 
     public boolean Sick(boolean change, ImageView img, boolean s) {
         return true;
@@ -547,6 +570,8 @@ public class main extends AppCompatActivity {
                                         editor.putString("User", json);
                                         editor.commit();
                                     }
+                                } else  if(user.getPom().getEnergy() <= 50){
+                                    change = (user.getPom()).Sleepy(change, pom, user.getPom().getEnergy());
                                 } else if (user.getPom().getHunger() <= 50) {
                                     change = (user.getPom()).Hungry(change, pom, user.getPom().getHunger());
                                 } else if (user.getPom().getSick()) {
