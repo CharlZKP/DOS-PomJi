@@ -10,6 +10,7 @@
 
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
@@ -57,8 +58,8 @@
     <Button
         android:id="@+id/playButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_height="85dp"
         android:layout_width="0dp"
+        android:layout_height="85dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="9dp"
         android:backgroundTint="@android:color/holo_orange_dark"
@@ -120,11 +121,11 @@
         android:fontFamily="@font/upheavtt"
         android:text="Sleep"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toRightOf="@id/playButton"
-        app:layout_constraintRight_toLeftOf="@id/inventoryButton"
         app:layout_constraintBottom_toTopOf="@id/cleanButton"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintLeft_toRightOf="@id/playButton"
+        app:layout_constraintRight_toLeftOf="@id/inventoryButton"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/inventoryButton"
@@ -136,31 +137,32 @@
         android:fontFamily="@font/upheavtt"
         android:text="The Bag"
         android:textColor="@android:color/white"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/cleanButton"
+        app:layout_constraintHorizontal_bias="0.656"
         app:layout_constraintLeft_toRightOf="@id/sleepButton"
-        app:layout_constraintHorizontal_bias="0.656" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/Money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/upheavtt"
         android:text="1997"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="5dp"
         app:layout_constraintRight_toLeftOf="@id/Coin"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="257dp"
         tools:layout_editor_absoluteY="16dp" />
+
     <TextView
         android:id="@+id/Coin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/upheavtt"
         android:text="Coin"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="257dp"
