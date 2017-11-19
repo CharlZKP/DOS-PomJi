@@ -24,36 +24,16 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class Medicine{
-    private int img;
-    private String name;
-    private String description;
-    private int price;
+class Medicine extends Item{
     private int cure;
     Medicine(int img,String name,String description,int price,int cure){
-        this.img = img;
-        this.name = name;
-        this.description = description;
-        this.price = price;
+        super(img,name,description,price);
         this.cure = cure;
-    }
-    public int getImg(){
-        return img;
-    }
-    public String getName(){
-        return name;
-    }
-    public String getDescription(){
-        return description;
-    }
-    public int getPrice(){
-        return price;
     }
     public int getCure(){
         return cure;
     }
 }
-
 public class MedShop extends Fragment {
     private Medicine[] med = new Medicine[2];
 

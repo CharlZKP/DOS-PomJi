@@ -18,6 +18,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+class ItemInventory{
+    private int quantity;
+
+    ItemInventory(int quantity){
+        this.quantity = quantity;
+    }
+
+    public void addItem(){
+        quantity++;
+    }
+
+    public void useItem(){
+        quantity-=1;
+    }
+
+    public int getQuantity(){
+        return quantity;
+    }
+}
+
 public class Inventory extends AppCompatActivity {
 
     /**

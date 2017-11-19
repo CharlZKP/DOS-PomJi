@@ -16,6 +16,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+class Item{
+    private int img;
+    private String name;
+    private String description;
+    private int price;
+    Item(int img,String name,String description,int price){
+        this.img = img;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+    public int getImg(){
+        return img;
+    }
+    public String getName(){
+        return name;
+    }
+    public String getDescription(){
+        return description;
+    }
+    public int getPrice(){
+        return price;
+    }
+}
+
 public class Shop extends AppCompatActivity {
 
     /**

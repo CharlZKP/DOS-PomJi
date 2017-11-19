@@ -30,33 +30,16 @@ import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class FoodInventory{
+class FoodInventory extends ItemInventory{
     private Food food;
-    private int quantity;
 
     FoodInventory(Food food, int quantity){
+        super(quantity);
         this.food = food;
-        this.quantity = quantity;
-    }
-
-    public void setFood(Food food){
-        this.food = food;
-    }
-
-    public void addItem(){
-        quantity++;
-    }
-
-    public void useItem(){
-        quantity-=1;
     }
 
     public Food getFood(){
         return food;
-    }
-
-    public int getQuantity(){
-        return quantity;
     }
 }
 
@@ -157,8 +140,8 @@ public class MyFood extends Fragment {
 
             imageView.setImageResource(food.get(i).getFood().getImg());
             txtName.setText(food.get(i).getFood().getName());
-            txtValue.setText(String.valueOf(food.get(i).getFood().getEnergy()));
-            txtQuantity.setText(String.valueOf(food.get(i).getQuantity()));
+            txtValue.setText("Energy: "+String.valueOf(food.get(i).getFood().getEnergy()));
+            txtQuantity.setText(String.valueOf(food.get(i).getQuantity()+" ea"));
 
             return view;
         }

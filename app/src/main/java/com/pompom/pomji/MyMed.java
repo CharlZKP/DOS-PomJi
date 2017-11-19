@@ -27,29 +27,16 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class MedInventory{
+class MedInventory extends ItemInventory {
     private Medicine med;
-    private int quantity;
 
-    MedInventory(Medicine med, int quantity){
+    MedInventory(Medicine med, int quantity) {
+        super(quantity);
         this.med = med;
-        this.quantity = quantity;
     }
 
-    public void addItem(){
-        quantity++;
-    }
-
-    public void useItem(){
-        quantity-=1;
-    }
-
-    public Medicine getMed(){
+    public Medicine getMed() {
         return med;
-    }
-
-    public int getQuantity(){
-        return quantity;
     }
 }
 
@@ -70,17 +57,19 @@ public class MyMed extends Fragment {
 
         SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
 
-        String json = shared.getString("med","");
-        Type type = new TypeToken<ArrayList<MedInventory>>(){}.getType();
+        String json = shared.getString("med", "");
+        Type type = new TypeToken<ArrayList<MedInventory>>() {
+        }.getType();
         mymed = gson.fromJson(json, type);
 
         if (mymed == null) {
             mymed = new ArrayList<>();
         }
 
-        json = shared.getString("checkmed","");
-        type = new TypeToken<ArrayList<String>>(){}.getType();
-        checkmed = gson.fromJson(json,type);
+        json = shared.getString("checkmed", "");
+        type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        checkmed = gson.fromJson(json, type);
         if (checkmed == null) {
             checkmed = new ArrayList<>();
         }
@@ -106,8 +95,8 @@ public class MyMed extends Fragment {
         }
 
         @Override
-        public View getView(final int i,View view,ViewGroup viewGroup){
-            view = getLayoutInflater().inflate(R.layout.cutom_inventory_layout,null);
+        public View getView(final int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.cutom_inventory_layout, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.imgItem);
             TextView txtName = (TextView) view.findViewById(R.id.txtItemName);
             TextView txtValue = (TextView) view.findViewById(R.id.txtItemValue);
@@ -120,7 +109,7 @@ public class MyMed extends Fragment {
                     Gson gson = new Gson();
                     MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.button);
                     mp.start();
-                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
+                    SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
                     String json = shared.getString("User", "");
                     User user = gson.fromJson(json, User.class);
@@ -128,18 +117,18 @@ public class MyMed extends Fragment {
                     mymed.get(i).useItem();
                     json = gson.toJson(user);
                     editor.putString("User", json);
-                    if(mymed.get(i).getQuantity()==0){
+                    if (mymed.get(i).getQuantity() == 0) {
                         mymed.remove(i);
                         checkmed.remove(i);
                     }
 
                     json = gson.toJson(mymed);
-                    editor.putString("med",json);
+                    editor.putString("med", json);
                     json = gson.toJson(checkmed);
-                    editor.putString("checkmed",json);
+                    editor.putString("checkmed", json);
                     editor.commit();
                     customAdapter.notifyDataSetChanged();
-                    Activity activity = (Activity)getContext();
+                    Activity activity = (Activity) getContext();
                     activity.finish();
                 }
             });
@@ -148,7 +137,7 @@ public class MyMed extends Fragment {
             imageView.setImageResource(mymed.get(i).getMed().getImg());
             txtName.setText(mymed.get(i).getMed().getName());
             txtValue.setText(String.valueOf(mymed.get(i).getMed().getCure()));
-            txtQuantity.setText(String.valueOf(mymed.get(i).getQuantity()));
+            txtQuantity.setText(String.valueOf(mymed.get(i).getQuantity()+" ea"));
 
             return view;
         }
