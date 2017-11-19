@@ -51,6 +51,47 @@
             android:scaleX="-1"
             android:src="@drawable/sharknapom" />
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/bar_clean"
+            app:layout_contraintRight_toRightOf="parent"
+            app:layout_contraintTop_toTopOf="parent"
+            />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/bar_energy"
+            app:layout_contraintRight_toRightOf="parent"
+            app:layout_contraintTop_toTopOf="parent"
+            />
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="220dp"
+            app:srcCompat="@drawable/bar_fun"
+            app:layout_contraintRight_toRightOf="parent"
+            app:layout_contraintTop_toTopOf="parent"
+            />
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="220dp"
+            app:srcCompat="@drawable/bar_energy"
+            app:layout_contraintRight_toRightOf="parent"
+            app:layout_contraintTop_toTopOf="parent"
+            />
+
 
     </FrameLayout>
 
