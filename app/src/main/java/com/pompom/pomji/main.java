@@ -564,7 +564,6 @@ public class main extends AppCompatActivity {
                                     if (user.getPom().getClean() > 100) {
                                         user.getPom().setClean(100);
                                         cleans = false;
-//
                                     } else {
                                         json = gson.toJson(user);
                                         editor.putString("User", json);

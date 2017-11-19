@@ -133,7 +133,6 @@ public class FoodShop extends Fragment {
                     }else {
                         Toast.makeText(getContext(),"Buy successful.", Toast.LENGTH_LONG).show();
                         editor.putInt("coin", shared.getInt("coin", 0) - food[i].getPrice());
-//                        Log.v("shop",String.valueOf(check.contains(food[i].getName())));
                         if(check.contains(food[i].getName())){
                             myfood.get(check.indexOf(food[i].getName())).addItem();
                         }else{
