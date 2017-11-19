@@ -27,17 +27,18 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class Food extends Item{
+class Food extends Item {
     private int energy;
-    Food(int img,String name,String description,int price,int energy){
-        super(img,name,description,price);
+
+    Food(int img, String name, String description, int price, int energy) {
+        super(img, name, description, price);
         this.energy = energy;
     }
-    public int getEnergy(){
+
+    public int getEnergy() {
         return energy;
     }
 }
-
 
 
 public class FoodShop extends Fragment {
@@ -50,9 +51,9 @@ public class FoodShop extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_shop, container, false);
-        food[0] = new Food(R.drawable.sushi,"Sushi","Popular japanese food.",100,20);
-        food[1] = new Food(R.drawable.steak,"Steak","Unique pom's food.",200,40);
-        food[2] = new Food(R.drawable.berger,"Hamburger","The most delicious.",300,80);
+        food[0] = new Food(R.drawable.sushi, "Sushi", "Popular japanese food.", 100, 20);
+        food[1] = new Food(R.drawable.steak, "Steak", "Unique pom's food.", 200, 40);
+        food[2] = new Food(R.drawable.berger, "Hamburger", "The most delicious.", 300, 80);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
@@ -60,17 +61,19 @@ public class FoodShop extends Fragment {
         Gson gson = new Gson();
 
         SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
-        String json = shared.getString("food","");
-        Type type = new TypeToken<ArrayList<FoodInventory>>(){}.getType();
+        String json = shared.getString("food", "");
+        Type type = new TypeToken<ArrayList<FoodInventory>>() {
+        }.getType();
         myfood = gson.fromJson(json, type);
 
         if (myfood == null) {
             myfood = new ArrayList<>();
         }
 
-        json = shared.getString("checkfood","");
-        type = new TypeToken<ArrayList<String>>(){}.getType();
-        check = gson.fromJson(json,type);
+        json = shared.getString("checkfood", "");
+        type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        check = gson.fromJson(json, type);
         if (check == null) {
             check = new ArrayList<>();
         }
@@ -78,7 +81,7 @@ public class FoodShop extends Fragment {
         return rootView;
     }
 
-    class CustomAdapter extends BaseAdapter{
+    class CustomAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -96,8 +99,8 @@ public class FoodShop extends Fragment {
         }
 
         @Override
-        public View getView(final int i,View view,ViewGroup viewGroup){
-            view = getLayoutInflater().inflate(R.layout.cutom_shop_layout,null);
+        public View getView(final int i, View view, ViewGroup viewGroup) {
+            view = getLayoutInflater().inflate(R.layout.cutom_shop_layout, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.imgItem);
             TextView txtName = (TextView) view.findViewById(R.id.txtItemName);
             TextView txtDes = (TextView) view.findViewById(R.id.txtItemDescription);
@@ -108,26 +111,30 @@ public class FoodShop extends Fragment {
             buyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
+                    SharedPreferences shared = getContext().getSharedPreferences("my_ref", MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
                     MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.button);
                     mp.start();
-                    if(shared.getInt("coin",0)-food[i].getPrice()<0){
-                        Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getContext(),"Buy successful.", Toast.LENGTH_LONG).show();
-                        editor.putInt("coin", shared.getInt("coin", 0) - food[i].getPrice());
-                        if(check.contains(food[i].getName())){
+                    String json = shared.getString("User", "");
+                    Gson gson = new Gson();
+                    User user = gson.fromJson(json, User.class);
+                    if (user.getMoney() < food[i].getPrice()) {
+                        Toast.makeText(getContext(), "Not enough coin.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "Buy successful.", Toast.LENGTH_LONG).show();
+                        user.setMoney(user.getMoney() - food[i].getPrice());
+                        json = gson.toJson(user);
+                        editor.putString("User", json);
+                        if (check.contains(food[i].getName())) {
                             myfood.get(check.indexOf(food[i].getName())).addItem();
-                        }else{
+                        } else {
                             check.add(food[i].getName());
-                            myfood.add(new FoodInventory(food[i],1));
+                            myfood.add(new FoodInventory(food[i], 1));
                         }
-                        Gson gson = new Gson();
-                        String json = gson.toJson(myfood);
-                        editor.putString("food",json);
+                        json = gson.toJson(myfood);
+                        editor.putString("food", json);
                         json = gson.toJson(check);
-                        editor.putString("checkfood",json);
+                        editor.putString("checkfood", json);
                     }
                     editor.commit();
                 }
@@ -137,8 +144,8 @@ public class FoodShop extends Fragment {
             imageView.setImageResource(food[i].getImg());
             txtName.setText(food[i].getName());
             txtDes.setText(food[i].getDescription());
-            txtValue.setText("Energy: "+String.valueOf(food[i].getEnergy()));
-            txtPrice.setText("Price: "+String.valueOf(food[i].getPrice()));
+            txtValue.setText("Energy: " + String.valueOf(food[i].getEnergy()));
+            txtPrice.setText("Price: " + String.valueOf(food[i].getPrice()));
 
             return view;
         }

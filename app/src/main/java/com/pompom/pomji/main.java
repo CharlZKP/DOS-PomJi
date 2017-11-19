@@ -28,6 +28,16 @@ class User {
     private String name;
     @Expose
     private Sharknapom pom;
+    @Expose
+    private int money=3000;
+
+    public void setMoney(int money){
+        this.money = money;
+    }
+
+    public int getMoney(){
+        return money;
+    }
 
     public void setName(String n) {
         name = n;
@@ -372,7 +382,7 @@ public class main extends AppCompatActivity {
     private User user;
     private boolean cleans = false;
     private boolean sleepy = false;
-    private int coin;
+//    private int coin;
     private int sum = 0;
 
 
@@ -383,7 +393,7 @@ public class main extends AppCompatActivity {
 
         final SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
         final SharedPreferences.Editor editor = shared.edit();
-        Gson gson = new Gson();
+        final Gson gson = new Gson();
         boolean first = shared.getBoolean("first", true);
 
 
@@ -457,13 +467,13 @@ public class main extends AppCompatActivity {
             user.buyPom();
             String json = gson.toJson(user);
             editor.putString("User", json);
-            editor.putInt("coin", 3000);
+//            editor.putInt("coin", 3000);
             editor.putBoolean("first", false);
             editor.commit();
         } else {
             String json = shared.getString("User", "");
             user = gson.fromJson(json, User.class);
-            coin = shared.getInt("coin", 0);
+//            coin = shared.getInt("coin", 0);
         }
 
         userName.setText(user.getName());
@@ -489,8 +499,9 @@ public class main extends AppCompatActivity {
                     @Override
                     public void run() {
                         SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
-                        coin = shared.getInt("coin", 0);
-                        money.setText(String.valueOf(coin));
+                        String json = shared.getString("User", "");
+                        User user2 = gson.fromJson(json, User.class);
+                        money.setText(String.valueOf(user2.getMoney()));
                     }
                 });
             }

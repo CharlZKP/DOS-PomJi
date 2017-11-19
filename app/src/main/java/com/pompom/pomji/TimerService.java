@@ -97,7 +97,7 @@ public class TimerService extends IntentService {
                 editor.putString("User", json);
                 editor.commit();
             }
-            if(user.getPom().getHunger()==30){
+            if(user.getPom().getHunger()<=30){
                 Notification notification =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -125,7 +125,7 @@ public class TimerService extends IntentService {
                 notificationManager.notify(1, notification);
 
             }
-            if(user.getPom().getClean()==30){
+            if(user.getPom().getClean()<=30){
                 Notification notification =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -139,7 +139,7 @@ public class TimerService extends IntentService {
                 notificationManager.notify(2, notification);
 
             }
-            if(user.getPom().getEnergy()==30){
+            if(user.getPom().getEnergy()<=30){
                 Notification notification =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -154,7 +154,7 @@ public class TimerService extends IntentService {
 
             }
 
-            if(user.getPom().getFun()==30){
+            if(user.getPom().getFun()<=30){
                 Notification notification =
                         new NotificationCompat.Builder(this)
                                 .setSmallIcon(R.mipmap.ic_launcher)
