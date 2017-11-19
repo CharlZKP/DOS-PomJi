@@ -4,42 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pompom.pomji.PlayWithPom"
-    android:background="@drawable/bg_run">
+    tools:context="com.pompom.pomji.PlayWithPom">
 
     <TextView
         android:id="@+id/steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
-        android:textSize="77dp"
+        android:textSize="50dp"
         android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:fontFamily="@font/upheavtt"
-        app:layout_constraintTop_toBottomOf="@id/pom"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:gravity="center"/>
     <ImageView
         android:id="@+id/pom"
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_gravity="center"
-        android:layout_marginTop="130dp"
         android:scaleX="-1"
-        android:src="@drawable/sharknapom"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
+        android:src="@drawable/sharknapom" />
     <ProgressBar
         android:id="@+id/funbar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="278dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="150dp"
+        android:layout_height="12dp"
+        android:layout_gravity="bottom"
+        android:layout_marginRight="5dp"
         android:max="100"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/steps" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.124" />
 
 </android.support.constraint.ConstraintLayout>

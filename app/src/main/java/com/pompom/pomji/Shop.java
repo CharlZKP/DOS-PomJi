@@ -1,7 +1,5 @@
 package com.pompom.pomji;
 
-import android.graphics.Typeface;
-import android.provider.FontsContract;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -49,13 +47,6 @@ public class Shop extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-            textView.setTypeface(Typeface.DEFAULT);
-            tabLayout.getTabAt(i).setCustomView(textView);
-
-        }
-
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -74,7 +65,7 @@ public class Shop extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
+            switch (position){
                 case 0:
                     FoodShop foodShop = new FoodShop();
                     return foodShop;

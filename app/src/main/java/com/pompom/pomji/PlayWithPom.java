@@ -24,7 +24,7 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
 
     TextView steps;
 
-    private float count;
+    float count = 0;
 
     boolean running = false;
 
@@ -36,7 +36,6 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        count = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_with_pom);
         steps = (TextView) findViewById(R.id.steps);

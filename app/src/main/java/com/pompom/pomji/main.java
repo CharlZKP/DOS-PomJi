@@ -67,10 +67,10 @@ abstract class Pom {
 
 
     Pom() {
-        hunger = 30;
-        energy = 30;
-        clean = 30;
-        fun = 30;
+        hunger = 50;
+        energy = 100;
+        clean = 50;
+        fun = 100;
         sleep = false;
         sick = false;
     }
