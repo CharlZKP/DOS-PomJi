@@ -30,6 +30,10 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
 
     boolean change = false;
 
+    boolean first = true;
+
+    int step = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +41,7 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
         steps = (TextView) findViewById(R.id.steps);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = shared.edit();
-        Gson gson = new Gson();
-        final User user;
-        String json = shared.getString("User", "");
-        user = gson.fromJson(json, User.class);
+
 
         ProgressBar funbar = (ProgressBar) findViewById(R.id.funbar);
         final ImageView pom = (ImageView) findViewById(R.id.pom);
@@ -49,20 +49,6 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
         FunBar funBar = new FunBar(funbar);
 
         funBar.decrease(shared);
-
-        Timer timer = new Timer();
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        change = user.getPom().Move(change, pom);
-                    }
-                });
-            }
-        }, 0, 180);
 
 
     }
@@ -87,13 +73,12 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
         Gson gson = new Gson();
         String json = shared.getString("User", "");
         User user = gson.fromJson(json, User.class);
-        user.getPom().setFun((int) count / 5);
-        if(user.getPom().getFun()>100){
+        user.getPom().setFun(user.getPom().getFun()+(int) count / 5);
+        if (user.getPom().getFun() > 100) {
             user.getPom().setFun(100);
         }
         json = gson.toJson(user);
         editor.putString("User", json);
-        editor.putFloat("step", count);
         editor.commit();
         running = false;
         sensorManager.unregisterListener(this);
@@ -102,15 +87,18 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (running) {
-
             SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = shared.edit();
-            if (shared.getFloat("step", 0) == 0) {
-                editor.putFloat("step", 0);
-                editor.commit();
+            Gson gson = new Gson();
+            String json = shared.getString("User", "");
+            User user = gson.fromJson(json, User.class);
+            ImageView pom = (ImageView) findViewById(R.id.pom);
+            change = user.getPom().Move(change, pom);
+            if (sensorEvent.values[0] != 0 && first) {
+                step = (int) sensorEvent.values[0];
             }
-            steps.setText(String.valueOf(sensorEvent.values[0] - shared.getFloat("step", 0)));
-            count = sensorEvent.values[0];
+            first = false;
+            steps.setText(String.valueOf((int)sensorEvent.values[0] - step));
+            count = sensorEvent.values[0] - step;
         }
     }
 
