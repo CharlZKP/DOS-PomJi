@@ -2,6 +2,7 @@ package com.pompom.pomji;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -117,6 +118,8 @@ public class MyMed extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Gson gson = new Gson();
+                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.button);
+                    mp.start();
                     SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
                     String json = shared.getString("User", "");

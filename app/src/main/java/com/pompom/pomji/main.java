@@ -2,6 +2,7 @@ package com.pompom.pomji;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +27,6 @@ class User {
     @Expose
     private String name;
     @Expose
-    private int money = 999;
-    @Expose
     private Sharknapom pom;
 
     public void setName(String n) {
@@ -36,14 +35,6 @@ class User {
 
     public String getName() {
         return name;
-    }
-
-    public void setMoney(int m) {
-        money = m;
-    }
-
-    public int getMoney() {
-        return money;
     }
 
     public void buyPom() {
@@ -67,12 +58,12 @@ abstract class Pom {
 
 
     Pom() {
-        hunger = 50;
-        energy = 50;
-        clean = 60;
-        fun = 100;
+        hunger = 30;
+        energy = 30;
+        clean = 30;
+        fun = 30;
         sleep = false;
-        sick = false;
+        sick = true;
     }
 
     protected void setName(String name) {
@@ -113,7 +104,7 @@ abstract class Pom {
 
     abstract boolean Move(boolean change, ImageView img);
 
-    abstract boolean Sick(boolean change, ImageView img, boolean s);
+    abstract boolean Sick(boolean change, ImageView img);
 
     abstract boolean Dirty(boolean change, ImageView img, int c);
 
@@ -129,15 +120,6 @@ abstract class Pom {
     protected void setSick(boolean s) {
         sick = s;
     }
-
-    protected void Sleep() {
-        sleep = true;
-    }
-
-    protected void Eat() {
-
-    }
-
 
     public boolean Clean(boolean change, ImageView img, int k) {
         if (k <= 50 && k > 30) {
@@ -188,9 +170,9 @@ class Sharknapom extends Pom {
         }
     }
 
-    public boolean Sick(boolean change, ImageView img, boolean s) {
+    public boolean Sick(boolean change, ImageView img) {
 
-        if (s) {
+        if (change) {
             img.setImageResource(R.drawable.sharknapom_1sick_1);
             return false;
         } else {
@@ -259,39 +241,35 @@ class Sharknapom extends Pom {
         }
     }
 
-    public boolean Sick(boolean change, ImageView img) {
-        return true;
-    }
-
 }
 
 
-class Udinopom extends Pom {
-    public Udinopom() {
-        super();
-    }
-    public boolean Hungry(boolean change, ImageView img, int h) {
-        return true;
-    }
-    public boolean Dirty(boolean change, ImageView img, int c) {
-        return true;
-    }
-    public boolean Sleepy(boolean change, ImageView img,int s){ return true;}
-
-    public boolean Sick(boolean change, ImageView img, boolean s) {
-        return true;
-    }
-
-    public boolean Move(boolean change, ImageView img) {
-        if (change) {
-            img.setImageResource(R.drawable.sharknapomwalk);
-            return false;
-        } else {
-            img.setImageResource(R.drawable.udinopom);
-            return true;
-        }
-    }
-}
+//class Udinopom extends Pom {
+//    public Udinopom() {
+//        super();
+//    }
+//    public boolean Hungry(boolean change, ImageView img, int h) {
+//        return true;
+//    }
+//    public boolean Dirty(boolean change, ImageView img, int c) {
+//        return true;
+//    }
+//    public boolean Sleepy(boolean change, ImageView img,int s){ return true;}
+//
+//    public boolean Sick(boolean change, ImageView img, boolean s) {
+//        return true;
+//    }
+//
+//    public boolean Move(boolean change, ImageView img) {
+//        if (change) {
+//            img.setImageResource(R.drawable.sharknapomwalk);
+//            return false;
+//        } else {
+//            img.setImageResource(R.drawable.udinopom);
+//            return true;
+//        }
+//    }
+//}
 
 abstract class Bar {
     protected ProgressBar bar;
@@ -392,7 +370,6 @@ public class main extends AppCompatActivity {
     private Handler handler = new Handler();
     private boolean change = false;
     private User user;
-    //    private Pom[] myPom = new Pom[3];
     private boolean cleans = false;
     private boolean sleepy = false;
     private int coin;
@@ -422,10 +399,12 @@ public class main extends AppCompatActivity {
         Button sleepButton = (Button) findViewById(R.id.sleepButton);
         Button inventoryButton = (Button) findViewById(R.id.inventoryButton);
         final TextView money = (TextView) findViewById(R.id.Money);
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.button);
 
         inventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mp.start();
                 if (!sleepy) {
                     Intent intent = new Intent(main.this, Inventory.class);
                     startActivity(intent);
@@ -436,6 +415,7 @@ public class main extends AppCompatActivity {
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mp.start();
                 Intent intent = new Intent(main.this, PlayWithPom.class);
                 startActivity(intent);
             }
@@ -443,6 +423,7 @@ public class main extends AppCompatActivity {
         shopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mp.start();
                 Intent intent = new Intent(main.this, Shop.class);
                 startActivity(intent);
             }
@@ -450,6 +431,7 @@ public class main extends AppCompatActivity {
         cleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mp.start();
                 if (!sleepy) cleans = true;
             }
         });
@@ -457,6 +439,7 @@ public class main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.all);
+                mp.start();
                 if (sleepy) {
                     sleepy = false;
                     cl.setBackgroundResource(R.drawable.bg_main);
@@ -569,14 +552,14 @@ public class main extends AppCompatActivity {
                                         editor.putString("User", json);
                                         editor.commit();
                                     }
-                                } else  if(user.getPom().getEnergy() <= 50){
-                                    change = (user.getPom()).Sleepy(change, pom, user.getPom().getEnergy());
+                                } else if (user.getPom().getSick()) {
+                                    change = (user.getPom()).Sick(change, pom);
                                 } else if (user.getPom().getHunger() <= 50) {
                                     change = (user.getPom()).Hungry(change, pom, user.getPom().getHunger());
-                                } else if (user.getPom().getSick()) {
-                                    change = (user.getPom()).Sick(change, pom, user.getPom().getSick());
                                 } else if (user.getPom().getClean() <= 50) {
                                     change = (user.getPom()).Dirty(change, pom, user.getPom().getClean());
+                                } else if (user.getPom().getEnergy() <= 50) {
+                                    change = (user.getPom()).Sleepy(change, pom, user.getPom().getEnergy());
                                 } else {
                                     change = (user.getPom()).Move(change, pom);
                                     changePos();

@@ -2,6 +2,7 @@ package com.pompom.pomji;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -68,9 +69,9 @@ public class FoodShop extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_shop, container, false);
-        food[0] = new Food(R.drawable.sushi,"Food1","Eat Eat Eat",100,20);
-        food[1] = new Food(R.drawable.steak,"Food2","Eat Eat Eat",200,40);
-        food[2] = new Food(R.drawable.berger,"Food3","Eat Eat Eat",300,80);
+        food[0] = new Food(R.drawable.sushi,"Sushi","Popular japanese food.",100,20);
+        food[1] = new Food(R.drawable.steak,"Steak","Unique pom's food.",200,40);
+        food[2] = new Food(R.drawable.berger,"Hamburger","The most delicious.",300,80);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
@@ -128,6 +129,8 @@ public class FoodShop extends Fragment {
                 public void onClick(View view) {
                     SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
+                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.button);
+                    mp.start();
                     if(shared.getInt("coin",0)-food[i].getPrice()<0){
                         Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
                     }else {
@@ -153,8 +156,8 @@ public class FoodShop extends Fragment {
             imageView.setImageResource(food[i].getImg());
             txtName.setText(food[i].getName());
             txtDes.setText(food[i].getDescription());
-            txtValue.setText(String.valueOf(food[i].getEnergy()));
-            txtPrice.setText(String.valueOf(food[i].getPrice()));
+            txtValue.setText("Energy: "+String.valueOf(food[i].getEnergy()));
+            txtPrice.setText("Price: "+String.valueOf(food[i].getPrice()));
 
             return view;
         }

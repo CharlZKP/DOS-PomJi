@@ -2,6 +2,7 @@ package com.pompom.pomji;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,8 +63,8 @@ public class MedShop extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.food_shop, container, false);
-        med[0] = new Medicine(R.drawable.bluebottle,"Med1","eiei",100,1);
-        med[1] = new Medicine(R.drawable.redbottle,"Med2","eiei",200,2);
+        med[0] = new Medicine(R.drawable.bluebottle,"B.potion","Bitter",100,1);
+        med[1] = new Medicine(R.drawable.redbottle,"R.potion","Sweet",200,2);
         ListView listView = (ListView) rootView.findViewById(R.id.lsFoodShop);
         CustomAdapter customAdapter = new CustomAdapter();
         listView.setAdapter(customAdapter);
@@ -123,6 +124,8 @@ public class MedShop extends Fragment {
                 public void onClick(View view) {
                     SharedPreferences shared = getContext().getSharedPreferences("my_ref",MODE_PRIVATE);
                     SharedPreferences.Editor editor = shared.edit();
+                    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.button);
+                    mp.start();
                     if(shared.getInt("coin",0)-med[i].getPrice()<0){
                         Toast.makeText(getContext(),"Not enough coin.", Toast.LENGTH_LONG).show();
                     }else {
@@ -150,11 +153,9 @@ public class MedShop extends Fragment {
             txtName.setText(med[i].getName());
             txtDes.setText(med[i].getDescription());
             txtValue.setText(String.valueOf(med[i].getCure()));
-            txtPrice.setText(String.valueOf(med[i].getPrice()));
+            txtPrice.setText("Price: "+String.valueOf(med[i].getPrice()));
 
             return view;
         }
     }
-
-
 }

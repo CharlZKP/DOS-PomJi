@@ -6,8 +6,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,9 +44,18 @@ public class PlayWithPom extends AppCompatActivity implements SensorEventListene
         steps = (TextView) findViewById(R.id.steps);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         SharedPreferences shared = getSharedPreferences("my_ref", MODE_PRIVATE);
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.button);
 
 
         ProgressBar funbar = (ProgressBar) findViewById(R.id.funbar);
+        Button btn = (Button) findViewById(R.id.backButton);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mp.start();
+                finish();
+            }
+        });
         final ImageView pom = (ImageView) findViewById(R.id.pom);
 
         FunBar funBar = new FunBar(funbar);
