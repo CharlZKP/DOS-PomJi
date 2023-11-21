@@ -12,6 +12,7 @@ on:
   push:
     branches:
       - 'release/**'
+      - 'master'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,8 +36,8 @@ jobs:
       - name: Set Up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '17'
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
           cache: 'gradle'
 
       - name: Change wrapper permissions
